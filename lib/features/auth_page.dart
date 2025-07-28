@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendspace/data/application/repository_bundle_provider.codegen.dart';
+import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 
 class AuthPage extends ConsumerStatefulWidget {
   const AuthPage({super.key});

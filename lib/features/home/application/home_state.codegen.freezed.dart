@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'dashboard_state.codegen.dart';
+part of 'home_state.codegen.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- AsyncValue<List<Location>> get locations;
+ AsyncValue<List<Post>> get posts;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.locations, locations) || other.locations == locations));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.posts, posts) || other.posts == posts));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,locations);
+int get hashCode => Object.hash(runtimeType,posts);
 
 @override
 String toString() {
-  return 'HomeState(locations: $locations)';
+  return 'HomeState(posts: $posts)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- AsyncValue<List<Location>> locations
+ AsyncValue<List<Post>> posts
 });
 
 
@@ -63,10 +63,10 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? locations = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? posts = null,}) {
   return _then(_self.copyWith(
-locations: null == locations ? _self.locations : locations // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Location>>,
+posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
+as AsyncValue<List<Post>>,
   ));
 }
 
@@ -77,10 +77,10 @@ as AsyncValue<List<Location>>,
 
 
 class _HomeState implements HomeState {
-  const _HomeState({required this.locations});
+  const _HomeState({required this.posts});
   
 
-@override final  AsyncValue<List<Location>> locations;
+@override final  AsyncValue<List<Post>> posts;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -92,16 +92,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.locations, locations) || other.locations == locations));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.posts, posts) || other.posts == posts));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,locations);
+int get hashCode => Object.hash(runtimeType,posts);
 
 @override
 String toString() {
-  return 'HomeState(locations: $locations)';
+  return 'HomeState(posts: $posts)';
 }
 
 
@@ -112,7 +112,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- AsyncValue<List<Location>> locations
+ AsyncValue<List<Post>> posts
 });
 
 
@@ -129,10 +129,10 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? locations = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? posts = null,}) {
   return _then(_HomeState(
-locations: null == locations ? _self.locations : locations // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Location>>,
+posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
+as AsyncValue<List<Post>>,
   ));
 }
 
