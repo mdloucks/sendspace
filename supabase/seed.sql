@@ -76,20 +76,20 @@ VALUES
 
 -- Get a UUID from an existing climb type first
 -- Replace with your actual climb_type_id and user_id
---INSERT INTO posts (id, title, description, video_url, coordinates, grade, user_id, climb_type_id)
---VALUES (
---  gen_random_uuid(),
---  'First V5',
---  'Sent it after 4 tries on overhung wall.',
---  'https://example.com/video1.mp4',
---  tiger.st_point(-83.117093, 42.519011),
---  'V5',
---  '11111111-1111-1111-1111-111111111111', -- user_id
---  (SELECT id FROM climb_types WHERE name = 'Bouldering' LIMIT 1)
---);
---
---
----- Create a second user to follow the first one
+INSERT INTO posts (id, title, description, video_url, coordinates, grade, user_id, climb_type_id)
+VALUES (
+  gen_random_uuid(),
+  'First V5',
+  'Sent it after 4 tries on overhung wall.',
+  'https://example.com/video1.mp4',
+  tiger.st_point(-83.117093, 42.519011),
+  'V5',
+  (SELECT id from auth.users where email = 'user1@example.com' LIMIT 1),
+  (SELECT id FROM climb_types WHERE name = 'Bouldering' LIMIT 1)
+);
+
+
+-- Create a second user to follow the first one
 --INSERT INTO auth.users (id, email, encrypted_password)
 --VALUES (
 --    '22222222-2222-2222-2222-222222222222',
