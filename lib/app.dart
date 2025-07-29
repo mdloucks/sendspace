@@ -16,8 +16,10 @@ class _MainScaffoldState extends State<MainScaffold> {
   int _selectedIndex = 0;
   final _controller = PageController();
 
-  void _onItemTapped(BuildContext context, int index) {
-    setState(() => _selectedIndex = index);
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
     _controller.animateToPage(
       index,
       duration: Duration(milliseconds: 250),
@@ -29,20 +31,23 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        scrollDirection: Axis.horizontal,
         controller: _controller,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         children: [
           HomePage(key: Key('k_home_page')),
           RecordPage(key: Key('k_record_page')),
           MePage(key: Key('k_me_page')),
         ],
-        onPageChanged: (index) => _onItemTapped(context, index),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         selectedItemColor: context.colorTheme.primary,
         unselectedItemColor: context.colorTheme.secondary,
-        currentIndex: _selectedIndex,
-        onTap: (index) => _onItemTapped(context, index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Record'),
