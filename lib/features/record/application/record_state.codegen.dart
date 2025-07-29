@@ -1,17 +1,14 @@
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sendspace/core/data/models/post.codegen.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:path/path.dart' as path;
-
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sendspace/core/data/models/climb_type.codegen.dart';
 import 'package:sendspace/core/data/repositories/climb_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-part 'record_state.codegen.g.dart';
 part 'record_state.codegen.freezed.dart';
+part 'record_state.codegen.g.dart';
 
 @freezed
 abstract class RecordState with _$RecordState {

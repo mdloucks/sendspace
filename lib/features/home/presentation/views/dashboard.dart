@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/application/post_state.codegen.dart';
 import 'package:sendspace/core/data/models/post.codegen.dart';
-import 'package:sendspace/theme/spacing.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/features/auth_page.dart';
+import 'package:sendspace/theme/spacing.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -11,6 +13,14 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postState = ref.watch(postStateNotifierProvider);
+
+    // climber@example.com
+    // password123
+    final userId = ref.watch(authStateNotifierProvider).userId;
+
+    if (userId == null) {
+      return AuthPage(key: Key('k_auth_page'));
+    }
 
     return Scaffold(
       body: postState.posts.when(

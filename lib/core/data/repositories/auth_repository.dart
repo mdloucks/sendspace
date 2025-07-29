@@ -1,3 +1,4 @@
+import 'package:sendspace/core/failures/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthRepository {
@@ -20,7 +21,7 @@ class SupabaseAuthRepository implements AuthRepository {
       password: password,
     );
     if (response.user == null) {
-      throw Exception("Failed to sign in");
+      throw AuthFailure("Failed to sign in");
     }
   }
 
@@ -31,7 +32,7 @@ class SupabaseAuthRepository implements AuthRepository {
       password: password,
     );
     if (response.user == null) {
-      throw Exception("Failed to sign up");
+      throw AuthFailure("Failed to sign up");
     }
   }
 

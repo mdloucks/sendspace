@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 
 class AuthPage extends ConsumerStatefulWidget {
@@ -26,7 +27,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     try {
       if (_isLogin) {
         await authRepo.signInWithEmail(email, password);
+        ref.invalidate(authStateNotifierProvider);
       } else {
+        ref.invalidate(authStateNotifierProvider);
         await authRepo.signUpWithEmail(email, password);
       }
       // Success: Navigate to the next screen, or do some action (optional)

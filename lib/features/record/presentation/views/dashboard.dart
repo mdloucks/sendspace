@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'package:sendspace/core/data/models/climb_type.codegen.dart';
-import 'package:sendspace/core/failures/failure.dart';
 import 'package:sendspace/core/data/repositories/climb_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({super.key});
@@ -18,7 +16,9 @@ class RecordPage extends StatefulWidget {
 
 class _RecordPageState extends State<RecordPage> {
   final SupabaseClient _supabase = Supabase.instance.client;
-  final ClimbRepository _climbRepo = ClimbRepositoryImpl(Supabase.instance.client);
+  final ClimbRepository _climbRepo = ClimbRepositoryImpl(
+    Supabase.instance.client,
+  );
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -69,9 +69,9 @@ class _RecordPageState extends State<RecordPage> {
     final user = _supabase.auth.currentUser;
 
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User not authenticated.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('User not authenticated.')));
       return;
     }
 
@@ -93,9 +93,9 @@ class _RecordPageState extends State<RecordPage> {
           .upload(fileKey, _selectedVideo!);
 
       if (response.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Video upload failed.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Video upload failed.')));
         return;
       }
 
@@ -131,75 +131,81 @@ class _RecordPageState extends State<RecordPage> {
       appBar: AppBar(title: const Text('Create Post')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _loadingClimbTypes
-            ? const Center(child: CircularProgressIndicator())
-            : _loadError != null
+        child:
+            _loadingClimbTypes
+                ? const Center(child: CircularProgressIndicator())
+                : _loadError != null
                 ? Center(child: Text(_loadError!))
                 : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextField(
-                          controller: _titleController,
-                          decoration: const InputDecoration(
-                            labelText: 'Title',
-                            border: OutlineInputBorder(),
-                          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: _titleController,
+                        decoration: const InputDecoration(
+                          labelText: 'Title',
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _descriptionController,
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
-                            border: OutlineInputBorder(),
-                          ),
-                          maxLines: 3,
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(height: 16),
-                        DropdownButtonFormField<ClimbType>(
-                          value: _selectedClimbType,
-                          decoration: const InputDecoration(
-                            labelText: 'Climb Type',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: _climbTypes
-                              .map((type) => DropdownMenuItem(
+                        maxLines: 3,
+                      ),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<ClimbType>(
+                        value: _selectedClimbType,
+                        decoration: const InputDecoration(
+                          labelText: 'Climb Type',
+                          border: OutlineInputBorder(),
+                        ),
+                        items:
+                            _climbTypes
+                                .map(
+                                  (type) => DropdownMenuItem(
                                     value: type,
                                     child: Text(type.name),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedClimbType = value;
-                            });
-                          },
+                                  ),
+                                )
+                                .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedClimbType = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _gradeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Boulder Grade (e.g., V5)',
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _gradeController,
-                          decoration: const InputDecoration(
-                            labelText: 'Boulder Grade (e.g., V5)',
-                            border: OutlineInputBorder(),
-                          ),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: pickVideo,
+                        icon: const Icon(Icons.video_library),
+                        label: Text(
+                          _selectedVideo == null
+                              ? 'Pick Video'
+                              : 'Change Video',
                         ),
-                        const SizedBox(height: 16),
-                        ElevatedButton.icon(
-                          onPressed: pickVideo,
-                          icon: const Icon(Icons.video_library),
-                          label: Text(
-                            _selectedVideo == null ? 'Pick Video' : 'Change Video',
-                          ),
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: uploadPost,
+                          child: const Text('Submit Post'),
                         ),
-                        const SizedBox(height: 16),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: uploadPost,
-                            child: const Text('Submit Post'),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                ),
       ),
     );
   }
