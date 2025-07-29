@@ -30,18 +30,20 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _controller,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: [
-          HomePage(key: Key('k_home_page')),
-          RecordPage(key: Key('k_record_page')),
-          MePage(key: Key('k_me_page')),
-        ],
+      body: SafeArea(
+        child: PageView(
+          controller: _controller,
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          children: [
+            HomePage(key: Key('k_home_page')),
+            RecordPage(key: Key('k_record_page')),
+            MePage(key: Key('k_me_page')),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
