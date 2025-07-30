@@ -9,6 +9,7 @@ abstract class AuthRepository {
   String? getCurrentUserId();
 }
 
+// TODO: make auth service as well
 class SupabaseAuthRepository implements AuthRepository {
   final SupabaseClient _client;
 

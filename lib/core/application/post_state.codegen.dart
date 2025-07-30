@@ -3,10 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sendspace/core/data/models/post.codegen.dart';
 import 'package:sendspace/core/data/repositories/post_repository.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
-import 'package:sendspace/core/failures/failure.dart';
+import 'package:sendspace/core/data/types/result.dart';
 
-part 'post_state.codegen.g.dart';
 part 'post_state.codegen.freezed.dart';
+part 'post_state.codegen.g.dart';
 
 @freezed
 abstract class PostState with _$PostState {
@@ -22,11 +22,15 @@ class PostStateNotifier extends _$PostStateNotifier {
     Future(() async {
       _postRepository = ref.read(repositoryBundleProvider).posts;
 
-      try {
-        final posts = await _postRepository.getUserPosts();
-        state = state.copyWith(posts: AsyncValue.data(posts));
-      } on AuthFailure catch (e) {
-        state = state.copyWith(posts: AsyncValue.error(e, StackTrace.current));
+      final posts = await _postRepository.getUserPosts();
+
+      switch (posts) {
+        case ResultData<List<Post>>():
+          state = state.copyWith(posts: AsyncValue.data(posts.data));
+        case ResultFailure<List<Post>>():
+          state = state.copyWith(
+            posts: AsyncValue.error(posts.message, StackTrace.current),
+          );
       }
     });
     return PostState(posts: AsyncValue.loading());

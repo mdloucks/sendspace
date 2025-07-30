@@ -6,7 +6,7 @@ part of 'repository_bundle_provider.codegen.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$repositoryBundleHash() => r'926336d8b0eef84129a816ada0f37a3de3c6937d';
+String _$repositoryBundleHash() => r'0affceda445e1fa98ce7bfbf5655ab03880e9f55';
 
 /// See also [repositoryBundle].
 @ProviderFor(repositoryBundle)

@@ -6,7 +6,7 @@ part of 'post_state.codegen.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postStateNotifierHash() => r'1761c58775a01db6baf86df67ec91fa5ff247c30';
+String _$postStateNotifierHash() => r'82145618e947c71cc23b84672fdde81490102e6f';
 
 /// See also [PostStateNotifier].
 @ProviderFor(PostStateNotifier)
