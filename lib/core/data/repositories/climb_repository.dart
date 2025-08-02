@@ -1,26 +1,25 @@
 import 'package:sendspace/core/data/models/climb_type.codegen.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sendspace/core/data/services/climb_service.dart';
+import 'package:sendspace/core/data/types/result.dart';
 
 abstract class ClimbRepository {
-  Future<List<ClimbType>> getClimbTypes();
+  Future<Result<List<ClimbType>>> getClimbTypes();
 }
 
 class ClimbRepositoryImpl extends ClimbRepository {
-  final SupabaseClient _client;
+  final SupabaseClimbService _service;
 
-  ClimbRepositoryImpl(this._client);
+  ClimbRepositoryImpl(this._service);
 
   String get tableName => 'climb_types';
 
   @override
-  Future<List<ClimbType>> getClimbTypes() async {
-    final response = await _client
-        .from(tableName)
-        .select()
-        .order('created_at', ascending: false);
-
-    return (response as List)
-        .map((json) => ClimbType.fromJson(json as Map<String, dynamic>))
-        .toList();
+  Future<Result<List<ClimbType>>> getClimbTypes() async {
+    try {
+      final data = await _service.getClimbTypes();
+      return Future.value(ResultData(data));
+    } catch (e) {
+      return Future.value(ResultFailure("Could not fetch climb types $e"));
+    }
   }
 }

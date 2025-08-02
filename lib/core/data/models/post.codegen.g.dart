@@ -7,20 +7,23 @@ part of 'post.codegen.dart';
 // **************************************************************************
 
 Post _$PostFromJson(Map<String, dynamic> json) => Post(
-  id: json['id'] as String,
-  createdAt: DateTime.parse(json['created_at'] as String),
+  id: json['id'] as String?,
+  createdAt:
+      json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
   title: json['title'] as String,
   description: json['description'] as String?,
   videoUrl: json['video_url'] as String?,
-  coordinates: json['coordinates'] as String,
+  coordinates: json['coordinates'] as String?,
   grade: json['grade'] as String?,
-  userId: json['user_id'] as String,
+  userId: json['user_id'] as String?,
   climbTypeId: json['climb_type_id'] as String,
 );
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
   'id': instance.id,
-  'created_at': instance.createdAt.toIso8601String(),
+  'created_at': instance.createdAt?.toIso8601String(),
   'title': instance.title,
   'description': instance.description,
   'video_url': instance.videoUrl,

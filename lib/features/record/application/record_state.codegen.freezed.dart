@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RecordState {
 
- List<ClimbType> get climbTypes; ClimbType? get selectedClimbType; File? get selectedVideo; bool get loading; String? get error; String get title; String get description; String get grade;
+ List<ClimbType> get climbTypes; ClimbType? get selectedClimbType; File? get selectedVideo; String? get error; String get title; String get description; String get grade; FormStatus get status;
 /// Create a copy of RecordState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $RecordStateCopyWith<RecordState> get copyWith => _$RecordStateCopyWithImpl<Reco
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecordState&&const DeepCollectionEquality().equals(other.climbTypes, climbTypes)&&(identical(other.selectedClimbType, selectedClimbType) || other.selectedClimbType == selectedClimbType)&&(identical(other.selectedVideo, selectedVideo) || other.selectedVideo == selectedVideo)&&(identical(other.loading, loading) || other.loading == loading)&&(identical(other.error, error) || other.error == error)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.grade, grade) || other.grade == grade));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecordState&&const DeepCollectionEquality().equals(other.climbTypes, climbTypes)&&(identical(other.selectedClimbType, selectedClimbType) || other.selectedClimbType == selectedClimbType)&&(identical(other.selectedVideo, selectedVideo) || other.selectedVideo == selectedVideo)&&(identical(other.error, error) || other.error == error)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.grade, grade) || other.grade == grade)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(climbTypes),selectedClimbType,selectedVideo,loading,error,title,description,grade);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(climbTypes),selectedClimbType,selectedVideo,error,title,description,grade,status);
 
 @override
 String toString() {
-  return 'RecordState(climbTypes: $climbTypes, selectedClimbType: $selectedClimbType, selectedVideo: $selectedVideo, loading: $loading, error: $error, title: $title, description: $description, grade: $grade)';
+  return 'RecordState(climbTypes: $climbTypes, selectedClimbType: $selectedClimbType, selectedVideo: $selectedVideo, error: $error, title: $title, description: $description, grade: $grade, status: $status)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $RecordStateCopyWith<$Res>  {
   factory $RecordStateCopyWith(RecordState value, $Res Function(RecordState) _then) = _$RecordStateCopyWithImpl;
 @useResult
 $Res call({
- List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, bool loading, String? error, String title, String description, String grade
+ List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
 });
 
 
@@ -63,17 +63,17 @@ class _$RecordStateCopyWithImpl<$Res>
 
 /// Create a copy of RecordState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? loading = null,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,Object? status = null,}) {
   return _then(_self.copyWith(
 climbTypes: null == climbTypes ? _self.climbTypes : climbTypes // ignore: cast_nullable_to_non_nullable
 as List<ClimbType>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
 as ClimbType?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
-as File?,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
-as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as File?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,grade: null == grade ? _self.grade : grade // ignore: cast_nullable_to_non_nullable
-as String,
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as FormStatus,
   ));
 }
 
@@ -84,7 +84,7 @@ as String,
 
 
 class _RecordState implements RecordState {
-  const _RecordState({final  List<ClimbType> climbTypes = const [], this.selectedClimbType, this.selectedVideo, this.loading = false, this.error, this.title = '', this.description = '', this.grade = ''}): _climbTypes = climbTypes;
+  const _RecordState({final  List<ClimbType> climbTypes = const [], this.selectedClimbType, this.selectedVideo, this.error, this.title = '', this.description = '', this.grade = '', this.status = FormStatus.loading}): _climbTypes = climbTypes;
   
 
  final  List<ClimbType> _climbTypes;
@@ -96,11 +96,11 @@ class _RecordState implements RecordState {
 
 @override final  ClimbType? selectedClimbType;
 @override final  File? selectedVideo;
-@override@JsonKey() final  bool loading;
 @override final  String? error;
 @override@JsonKey() final  String title;
 @override@JsonKey() final  String description;
 @override@JsonKey() final  String grade;
+@override@JsonKey() final  FormStatus status;
 
 /// Create a copy of RecordState
 /// with the given fields replaced by the non-null parameter values.
@@ -112,16 +112,16 @@ _$RecordStateCopyWith<_RecordState> get copyWith => __$RecordStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecordState&&const DeepCollectionEquality().equals(other._climbTypes, _climbTypes)&&(identical(other.selectedClimbType, selectedClimbType) || other.selectedClimbType == selectedClimbType)&&(identical(other.selectedVideo, selectedVideo) || other.selectedVideo == selectedVideo)&&(identical(other.loading, loading) || other.loading == loading)&&(identical(other.error, error) || other.error == error)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.grade, grade) || other.grade == grade));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RecordState&&const DeepCollectionEquality().equals(other._climbTypes, _climbTypes)&&(identical(other.selectedClimbType, selectedClimbType) || other.selectedClimbType == selectedClimbType)&&(identical(other.selectedVideo, selectedVideo) || other.selectedVideo == selectedVideo)&&(identical(other.error, error) || other.error == error)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.grade, grade) || other.grade == grade)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_climbTypes),selectedClimbType,selectedVideo,loading,error,title,description,grade);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_climbTypes),selectedClimbType,selectedVideo,error,title,description,grade,status);
 
 @override
 String toString() {
-  return 'RecordState(climbTypes: $climbTypes, selectedClimbType: $selectedClimbType, selectedVideo: $selectedVideo, loading: $loading, error: $error, title: $title, description: $description, grade: $grade)';
+  return 'RecordState(climbTypes: $climbTypes, selectedClimbType: $selectedClimbType, selectedVideo: $selectedVideo, error: $error, title: $title, description: $description, grade: $grade, status: $status)';
 }
 
 
@@ -132,7 +132,7 @@ abstract mixin class _$RecordStateCopyWith<$Res> implements $RecordStateCopyWith
   factory _$RecordStateCopyWith(_RecordState value, $Res Function(_RecordState) _then) = __$RecordStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, bool loading, String? error, String title, String description, String grade
+ List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
 });
 
 
@@ -149,17 +149,17 @@ class __$RecordStateCopyWithImpl<$Res>
 
 /// Create a copy of RecordState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? loading = null,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,Object? status = null,}) {
   return _then(_RecordState(
 climbTypes: null == climbTypes ? _self._climbTypes : climbTypes // ignore: cast_nullable_to_non_nullable
 as List<ClimbType>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
 as ClimbType?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
-as File?,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
-as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as File?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,grade: null == grade ? _self.grade : grade // ignore: cast_nullable_to_non_nullable
-as String,
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as FormStatus,
   ));
 }
 

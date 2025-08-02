@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS "public"."posts" (
     "title" "text" NOT NULL,
     "description" "text",
     "video_url" "text",
-    "coordinates" "tiger"."geography" NOT NULL,
+    "coordinates" "tiger"."geography",
     "grade" character varying(10),
     "user_id" "uuid",
     "climb_type_id" "uuid"
@@ -246,9 +246,6 @@ GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
-
-
-
 
 
 

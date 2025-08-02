@@ -4,8 +4,13 @@ part 'climb_type.codegen.g.dart';
 
 @JsonSerializable()
 class ClimbType {
+  @JsonKey(name: 'id')
   final String id;
+
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
+
+  @JsonKey(name: 'name')
   final String name;
 
   ClimbType({required this.id, required this.createdAt, required this.name});

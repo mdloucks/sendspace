@@ -1,14 +1,18 @@
 import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:path/path.dart' as path;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sendspace/core/data/models/climb_type.codegen.dart';
+import 'package:sendspace/core/data/models/post.codegen.dart';
 import 'package:sendspace/core/data/repositories/climb_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sendspace/core/data/repositories/post_repository.dart';
+import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
+import 'package:sendspace/core/data/types/result.dart';
 
 part 'record_state.codegen.freezed.dart';
 part 'record_state.codegen.g.dart';
+
+enum FormStatus { loading, ready, submitting, finished, error }
 
 @freezed
 abstract class RecordState with _$RecordState {
@@ -16,22 +20,24 @@ abstract class RecordState with _$RecordState {
     @Default([]) List<ClimbType> climbTypes,
     ClimbType? selectedClimbType,
     File? selectedVideo,
-    @Default(false) bool loading,
     String? error,
     @Default('') String title,
     @Default('') String description,
     @Default('') String grade,
+    @Default(FormStatus.loading) FormStatus status,
   }) = _RecordState;
 }
 
 @riverpod
 class RecordStateNotifier extends _$RecordStateNotifier {
-  late final SupabaseClient client;
-  late final ClimbRepository climbRepo;
+  late final ClimbRepository _climbRepository;
+  late final PostRepository _postRepository;
 
   @override
   RecordState build() {
     Future(() async {
+      _climbRepository = ref.watch(repositoryBundleProvider).climb;
+      _postRepository = ref.watch(repositoryBundleProvider).posts;
       await _loadClimbTypes();
     });
 
@@ -39,19 +45,15 @@ class RecordStateNotifier extends _$RecordStateNotifier {
   }
 
   Future<void> _loadClimbTypes() async {
-    state = state.copyWith(loading: true);
-    try {
-      final types = await climbRepo.getClimbTypes();
-      state = state.copyWith(
-        climbTypes: types,
-        selectedClimbType: types.isNotEmpty ? types.first : null,
-        loading: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        error: 'Failed to load climb types.',
-        loading: false,
-      );
+    final types = await _climbRepository.getClimbTypes();
+    switch (types) {
+      case ResultData<List<ClimbType>>():
+        state = state.copyWith(
+          climbTypes: types.data,
+          status: FormStatus.ready,
+        );
+      case ResultFailure<List<ClimbType>>():
+        state = state.copyWith(error: types.message);
     }
   }
 
@@ -75,43 +77,39 @@ class RecordStateNotifier extends _$RecordStateNotifier {
     state = state.copyWith(grade: grade);
   }
 
-  Future<String?> uploadPost() async {
-    final user = client.auth.currentUser;
-    if (user == null) return 'User not authenticated.';
-    if (state.title.isEmpty || state.selectedClimbType == null) {
-      return 'Please complete all required fields.';
+  void uploadPost() async {
+    state = state.copyWith(status: FormStatus.loading);
+
+    final climbTypeId = state.selectedClimbType?.id;
+
+    if (climbTypeId == null) {
+      state = state.copyWith(
+        status: FormStatus.error,
+        error: "You need to select a climb type!",
+      );
+      return;
     }
 
-    String? videoUrl;
-    if (state.selectedVideo != null) {
-      final fileName = path.basename(state.selectedVideo!.path);
-      final fileKey = 'uploads/$fileName';
-      final bucket = 'videos';
-
-      final response = await client.storage
-          .from(bucket)
-          .upload(fileKey, state.selectedVideo!);
-      if (response.isEmpty) return 'Video upload failed.';
-
-      videoUrl = client.storage.from(bucket).getPublicUrl(fileKey);
-    }
-
-    await client.from('posts').insert({
-      'title': state.title,
-      'description': state.description,
-      'video_url': videoUrl,
-      'grade': state.grade,
-      'user_id': user.id,
-      'climb_type_id': state.selectedClimbType!.id,
-      'created_at': DateTime.now().toIso8601String(),
-    });
-
-    // Reset form
-    state = RecordState(
-      climbTypes: state.climbTypes,
-      selectedClimbType:
-          state.climbTypes.isNotEmpty ? state.climbTypes.first : null,
+    final post = Post(
+      title: state.title,
+      climbTypeId: climbTypeId,
+      grade: state.grade,
+      description: state.description,
     );
-    return null;
+
+    final result = await _postRepository.createPostWithVideo(
+      post: post,
+      videoFile: state.selectedVideo,
+    );
+
+    switch (result) {
+      case ResultData<void>():
+        state = state.copyWith(status: FormStatus.finished);
+      case ResultFailure<void>():
+        state = state.copyWith(
+          status: FormStatus.error,
+          error: "Failed to create post",
+        );
+    }
   }
 }
