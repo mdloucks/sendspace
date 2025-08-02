@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AuthState {
 
- String? get userId;
+ AsyncValue<String?> get userId;
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $AuthStateCopyWith<$Res>  {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) _then) = _$AuthStateCopyWithImpl;
 @useResult
 $Res call({
- String? userId
+ AsyncValue<String?> userId
 });
 
 
@@ -63,10 +63,10 @@ class _$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,}) {
   return _then(_self.copyWith(
-userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String?,
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as AsyncValue<String?>,
   ));
 }
 
@@ -77,10 +77,10 @@ as String?,
 
 
 class _AuthState implements AuthState {
-  const _AuthState({this.userId = null});
+  const _AuthState({this.userId = const AsyncValue.loading()});
   
 
-@override@JsonKey() final  String? userId;
+@override@JsonKey() final  AsyncValue<String?> userId;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
@@ -112,7 +112,7 @@ abstract mixin class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Re
   factory _$AuthStateCopyWith(_AuthState value, $Res Function(_AuthState) _then) = __$AuthStateCopyWithImpl;
 @override @useResult
 $Res call({
- String? userId
+ AsyncValue<String?> userId
 });
 
 
@@ -129,10 +129,10 @@ class __$AuthStateCopyWithImpl<$Res>
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,}) {
   return _then(_AuthState(
-userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String?,
+userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as AsyncValue<String?>,
   ));
 }
 

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/core/extensions/string.dart';
 import 'package:sendspace/features/home/presentation/views/dashboard.dart';
 import 'package:sendspace/features/me/presentation/views/dashboard.dart';
 import 'package:sendspace/features/record/presentation/views/dashboard.dart';
+import 'package:sendspace/routes/app_routes.dart';
 
-class MainScaffold extends StatefulWidget {
+class MainScaffold extends ConsumerStatefulWidget {
   final Widget child;
   const MainScaffold({super.key, required this.child});
 
   @override
-  State<MainScaffold> createState() => _MainScaffoldState();
+  ConsumerState<MainScaffold> createState() => _MainScaffoldState();
 }
 
-class _MainScaffoldState extends State<MainScaffold> {
+class _MainScaffoldState extends ConsumerState<MainScaffold> {
   int _selectedIndex = 0;
   final _controller = PageController();
 
@@ -29,6 +34,16 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authStateNotifierProvider.select((state) => state.userId), (
+      previous,
+      next,
+    ) {
+      final userId = next.value;
+      if (userId == null) {
+        context.goNamed(AppRoute.auth.name);
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: PageView(
@@ -50,10 +65,19 @@ class _MainScaffoldState extends State<MainScaffold> {
         onTap: _onItemTapped,
         selectedItemColor: context.colorTheme.primary,
         unselectedItemColor: context.colorTheme.secondary,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Record'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Me'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: AppRoute.home.name.firstLetterCapitalized(),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: AppRoute.record.name.firstLetterCapitalized(),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: AppRoute.me.name.firstLetterCapitalized(),
+          ),
         ],
       ),
     );
