@@ -116,6 +116,24 @@ VALUES (
   (SELECT id FROM climb_types WHERE name = 'Bouldering' LIMIT 1)
 );
 
+-- Insert corresponding user profiles (public.users) for your test users
+INSERT INTO public.users (id, display_name, bio, profile_image_url, climbing_level)
+VALUES
+  (
+    '11111111-1111-1111-1111-111111111111',
+    'User One',
+    'Just getting started with climbing.',
+    'https://example.com/avatars/user1.png',
+    'V3'
+  ),
+  (
+    '22222222-2222-2222-2222-222222222222',
+    'User Two',
+    'Experienced gym rat and outdoor climber.',
+    'https://example.com/avatars/user2.png',
+    'V7'
+  );
+
 
 -- Create a second user to follow the first one
 --INSERT INTO auth.users (id, email, encrypted_password)

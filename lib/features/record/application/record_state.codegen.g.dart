@@ -7,7 +7,7 @@ part of 'record_state.codegen.dart';
 // **************************************************************************
 
 String _$recordStateNotifierHash() =>
-    r'33174478e18810c1e8dc2aac0e3f20c0cb444489';
+    r'af0fae6713d399df77a89b5a5da5e4113e623418';
 
 /// See also [RecordStateNotifier].
 @ProviderFor(RecordStateNotifier)
