@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- AsyncValue<List<Post>> get posts;
+ AsyncValue<List<PostsRow>> get posts;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- AsyncValue<List<Post>> posts
+ AsyncValue<List<PostsRow>> posts
 });
 
 
@@ -66,7 +66,7 @@ class _$HomeStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? posts = null,}) {
   return _then(_self.copyWith(
 posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Post>>,
+as AsyncValue<List<PostsRow>>,
   ));
 }
 
@@ -80,7 +80,7 @@ class _HomeState implements HomeState {
   const _HomeState({required this.posts});
   
 
-@override final  AsyncValue<List<Post>> posts;
+@override final  AsyncValue<List<PostsRow>> posts;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -112,7 +112,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- AsyncValue<List<Post>> posts
+ AsyncValue<List<PostsRow>> posts
 });
 
 
@@ -132,7 +132,7 @@ class __$HomeStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? posts = null,}) {
   return _then(_HomeState(
 posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Post>>,
+as AsyncValue<List<PostsRow>>,
   ));
 }
 

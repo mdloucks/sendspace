@@ -1,9 +1,9 @@
-import 'package:sendspace/core/data/models/climb_type.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
 import 'package:sendspace/core/data/services/climb_service.dart';
 import 'package:sendspace/core/data/types/result.dart';
 
 abstract class ClimbRepository {
-  Future<Result<List<ClimbType>>> getClimbTypes();
+  Future<Result<List<ClimbTypesRow>>> getClimbTypes();
 }
 
 class ClimbRepositoryImpl extends ClimbRepository {
@@ -14,7 +14,7 @@ class ClimbRepositoryImpl extends ClimbRepository {
   String get tableName => 'climb_types';
 
   @override
-  Future<Result<List<ClimbType>>> getClimbTypes() async {
+  Future<Result<List<ClimbTypesRow>>> getClimbTypes() async {
     try {
       final data = await _service.getClimbTypes();
       return Future.value(ResultData(data));

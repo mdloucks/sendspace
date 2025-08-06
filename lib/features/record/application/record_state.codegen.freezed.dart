@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RecordState {
 
- List<ClimbType> get climbTypes; ClimbType? get selectedClimbType; File? get selectedVideo; String? get error; String get title; String get description; String get grade; FormStatus get status;
+ List<ClimbTypesRow> get climbTypes; ClimbTypesRow? get selectedClimbType; File? get selectedVideo; String? get error; String get title; String get description; String get grade; FormStatus get status;
 /// Create a copy of RecordState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $RecordStateCopyWith<$Res>  {
   factory $RecordStateCopyWith(RecordState value, $Res Function(RecordState) _then) = _$RecordStateCopyWithImpl;
 @useResult
 $Res call({
- List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
+ List<ClimbTypesRow> climbTypes, ClimbTypesRow? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
 });
 
 
@@ -66,8 +66,8 @@ class _$RecordStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,Object? status = null,}) {
   return _then(_self.copyWith(
 climbTypes: null == climbTypes ? _self.climbTypes : climbTypes // ignore: cast_nullable_to_non_nullable
-as List<ClimbType>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
-as ClimbType?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
+as List<ClimbTypesRow>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
+as ClimbTypesRow?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
 as File?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
@@ -84,17 +84,17 @@ as FormStatus,
 
 
 class _RecordState implements RecordState {
-  const _RecordState({final  List<ClimbType> climbTypes = const [], this.selectedClimbType, this.selectedVideo, this.error, this.title = '', this.description = '', this.grade = '', this.status = FormStatus.loading}): _climbTypes = climbTypes;
+  const _RecordState({final  List<ClimbTypesRow> climbTypes = const [], this.selectedClimbType, this.selectedVideo, this.error, this.title = '', this.description = '', this.grade = '', this.status = FormStatus.loading}): _climbTypes = climbTypes;
   
 
- final  List<ClimbType> _climbTypes;
-@override@JsonKey() List<ClimbType> get climbTypes {
+ final  List<ClimbTypesRow> _climbTypes;
+@override@JsonKey() List<ClimbTypesRow> get climbTypes {
   if (_climbTypes is EqualUnmodifiableListView) return _climbTypes;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_climbTypes);
 }
 
-@override final  ClimbType? selectedClimbType;
+@override final  ClimbTypesRow? selectedClimbType;
 @override final  File? selectedVideo;
 @override final  String? error;
 @override@JsonKey() final  String title;
@@ -132,7 +132,7 @@ abstract mixin class _$RecordStateCopyWith<$Res> implements $RecordStateCopyWith
   factory _$RecordStateCopyWith(_RecordState value, $Res Function(_RecordState) _then) = __$RecordStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<ClimbType> climbTypes, ClimbType? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
+ List<ClimbTypesRow> climbTypes, ClimbTypesRow? selectedClimbType, File? selectedVideo, String? error, String title, String description, String grade, FormStatus status
 });
 
 
@@ -152,8 +152,8 @@ class __$RecordStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? climbTypes = null,Object? selectedClimbType = freezed,Object? selectedVideo = freezed,Object? error = freezed,Object? title = null,Object? description = null,Object? grade = null,Object? status = null,}) {
   return _then(_RecordState(
 climbTypes: null == climbTypes ? _self._climbTypes : climbTypes // ignore: cast_nullable_to_non_nullable
-as List<ClimbType>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
-as ClimbType?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
+as List<ClimbTypesRow>,selectedClimbType: freezed == selectedClimbType ? _self.selectedClimbType : selectedClimbType // ignore: cast_nullable_to_non_nullable
+as ClimbTypesRow?,selectedVideo: freezed == selectedVideo ? _self.selectedVideo : selectedVideo // ignore: cast_nullable_to_non_nullable
 as File?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable

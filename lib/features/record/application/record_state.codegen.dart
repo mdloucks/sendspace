@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sendspace/core/data/models/climb_type.codegen.dart';
-import 'package:sendspace/core/data/models/post.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/data/repositories/climb_repository.dart';
 import 'package:sendspace/core/data/repositories/post_repository.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
@@ -17,8 +17,8 @@ enum FormStatus { loading, ready, submitting, finished, error }
 @freezed
 abstract class RecordState with _$RecordState {
   const factory RecordState({
-    @Default([]) List<ClimbType> climbTypes,
-    ClimbType? selectedClimbType,
+    @Default([]) List<ClimbTypesRow> climbTypes,
+    ClimbTypesRow? selectedClimbType,
     File? selectedVideo,
     String? error,
     @Default('') String title,
@@ -47,17 +47,17 @@ class RecordStateNotifier extends _$RecordStateNotifier {
   Future<void> _loadClimbTypes() async {
     final types = await _climbRepository.getClimbTypes();
     switch (types) {
-      case ResultData<List<ClimbType>>():
+      case ResultData<List<ClimbTypesRow>>():
         state = state.copyWith(
           climbTypes: types.data,
           status: FormStatus.ready,
         );
-      case ResultFailure<List<ClimbType>>():
+      case ResultFailure<List<ClimbTypesRow>>():
         state = state.copyWith(error: types.message);
     }
   }
 
-  void setSelectedClimbType(ClimbType? type) {
+  void setSelectedClimbType(ClimbTypesRow? type) {
     state = state.copyWith(selectedClimbType: type);
   }
 
@@ -90,7 +90,7 @@ class RecordStateNotifier extends _$RecordStateNotifier {
       return;
     }
 
-    final post = Post(
+    final post = PostsRow(
       title: state.title,
       climbTypeId: climbTypeId,
       grade: state.grade,

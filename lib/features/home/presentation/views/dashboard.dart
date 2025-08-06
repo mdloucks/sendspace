@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/application/post_state.codegen.dart';
-import 'package:sendspace/core/data/models/post.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/auth_page.dart';
 import 'package:sendspace/theme/spacing.dart';
@@ -45,7 +45,7 @@ class HomePage extends ConsumerWidget {
 }
 
 class _PostCard extends StatelessWidget {
-  final Post post;
+  final PostsRow post;
 
   const _PostCard({required this.post});
 

@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:sendspace/core/data/models/post.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/data/services/post_service.dart';
 import 'package:sendspace/core/data/types/result.dart';
 
 abstract class PostRepository {
-  Future<Result<List<Post>>> getUserPosts();
+  Future<Result<List<PostsRow>>> getUserPosts();
 
   Future<Result<void>> createPostWithVideo({
-    required Post post,
+    required PostsRow post,
     File? videoFile,
   });
 }
@@ -19,7 +19,7 @@ class PostRepositoryImpl extends PostRepository {
   PostRepositoryImpl(this._service);
 
   @override
-  Future<Result<List<Post>>> getUserPosts() async {
+  Future<Result<List<PostsRow>>> getUserPosts() async {
     try {
       final data = await _service.getUserPosts();
       return Future.value(ResultData(data));
@@ -30,14 +30,14 @@ class PostRepositoryImpl extends PostRepository {
 
   @override
   Future<Result<void>> createPostWithVideo({
-    required Post post,
+    required PostsRow post,
     File? videoFile,
   }) async {
     if (post.title.trim().isEmpty) {
       return ResultFailure('Post title is required.');
     }
 
-    if (post.climbTypeId.trim().isEmpty) {
+    if (post.climbTypeId == null) {
       return ResultFailure('Climb type must be selected.');
     }
 

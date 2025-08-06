@@ -1,8 +1,8 @@
-import 'package:sendspace/core/data/models/climb_type.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class ClimbService {
-  Future<List<ClimbType>> getClimbTypes();
+  Future<List<ClimbTypesRow>> getClimbTypes();
 }
 
 class SupabaseClimbService extends ClimbService {
@@ -13,14 +13,14 @@ class SupabaseClimbService extends ClimbService {
   String get tableName => 'climb_types';
 
   @override
-  Future<List<ClimbType>> getClimbTypes() async {
+  Future<List<ClimbTypesRow>> getClimbTypes() async {
     final response = await _client
         .from(tableName)
         .select()
         .order('created_at', ascending: false);
 
     return (response as List)
-        .map((json) => ClimbType.fromJson(json as Map<String, dynamic>))
+        .map((json) => ClimbTypesRow.fromJson(json as Map<String, dynamic>))
         .toList();
   }
 }

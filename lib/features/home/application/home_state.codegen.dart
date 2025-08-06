@@ -1,13 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sendspace/core/data/models/post.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 
 part 'home_state.codegen.freezed.dart';
 part 'home_state.codegen.g.dart';
 
 @freezed
 abstract class HomeState with _$HomeState {
-  const factory HomeState({required AsyncValue<List<Post>> posts}) = _HomeState;
+  const factory HomeState({required AsyncValue<List<PostsRow>> posts}) =
+      _HomeState;
 }
 
 @riverpod

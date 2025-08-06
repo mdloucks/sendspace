@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PostState {
 
- AsyncValue<List<Post>> get posts;
+ AsyncValue<List<PostsRow>> get posts;
 /// Create a copy of PostState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $PostStateCopyWith<$Res>  {
   factory $PostStateCopyWith(PostState value, $Res Function(PostState) _then) = _$PostStateCopyWithImpl;
 @useResult
 $Res call({
- AsyncValue<List<Post>> posts
+ AsyncValue<List<PostsRow>> posts
 });
 
 
@@ -66,7 +66,7 @@ class _$PostStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? posts = null,}) {
   return _then(_self.copyWith(
 posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Post>>,
+as AsyncValue<List<PostsRow>>,
   ));
 }
 
@@ -80,7 +80,7 @@ class _PostState implements PostState {
   const _PostState({required this.posts});
   
 
-@override final  AsyncValue<List<Post>> posts;
+@override final  AsyncValue<List<PostsRow>> posts;
 
 /// Create a copy of PostState
 /// with the given fields replaced by the non-null parameter values.
@@ -112,7 +112,7 @@ abstract mixin class _$PostStateCopyWith<$Res> implements $PostStateCopyWith<$Re
   factory _$PostStateCopyWith(_PostState value, $Res Function(_PostState) _then) = __$PostStateCopyWithImpl;
 @override @useResult
 $Res call({
- AsyncValue<List<Post>> posts
+ AsyncValue<List<PostsRow>> posts
 });
 
 
@@ -132,7 +132,7 @@ class __$PostStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? posts = null,}) {
   return _then(_PostState(
 posts: null == posts ? _self.posts : posts // ignore: cast_nullable_to_non_nullable
-as AsyncValue<List<Post>>,
+as AsyncValue<List<PostsRow>>,
   ));
 }
 

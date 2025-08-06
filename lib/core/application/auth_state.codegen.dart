@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sendspace/core/data/repositories/auth_repository.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

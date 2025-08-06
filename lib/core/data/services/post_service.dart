@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
-import 'package:sendspace/core/data/models/post.codegen.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/failures/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class PostService {
-  Future<void> createPost({required Post post, File? videoFile});
+  Future<void> createPost({required PostsRow post, File? videoFile});
 
-  Future<List<Post>> getUserPosts();
+  Future<List<PostsRow>> getUserPosts();
   Future<void> uploadVideo(File file);
 }
 
@@ -22,7 +22,7 @@ class SupabasePostService extends PostService {
 
   @override
   /// Creates a post and optionally uploads a video
-  Future<void> createPost({required Post post, File? videoFile}) async {
+  Future<void> createPost({required PostsRow post, File? videoFile}) async {
     final user = _client.auth.currentUser;
     if (user == null) {
       throw AuthException("User not authenticated");
@@ -46,7 +46,7 @@ class SupabasePostService extends PostService {
   }
 
   @override
-  Future<List<Post>> getUserPosts() async {
+  Future<List<PostsRow>> getUserPosts() async {
     final userId = _client.auth.currentUser?.id;
 
     if (userId == null) {
@@ -61,7 +61,7 @@ class SupabasePostService extends PostService {
           .order('created_at', ascending: false);
 
       return (response as List)
-          .map((json) => Post.fromJson(json as Map<String, dynamic>))
+          .map((json) => PostsRow.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
       return Future.error(e);
