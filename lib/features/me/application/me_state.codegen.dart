@@ -29,7 +29,6 @@ class MeStateNotifier extends _$MeStateNotifier {
     _userRepository = bundle.users;
     _postRepository = bundle.posts;
 
-    // Initial state is loading for both user and posts
     return MeState(
       user: const AsyncValue.loading(),
       posts: const AsyncValue.loading(),

@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
+import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
 
 class RecordPage extends ConsumerWidget {
@@ -39,6 +40,7 @@ class RecordPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: context.colorTheme.surface,
       appBar: AppBar(title: const Text('Create Post')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

@@ -23,6 +23,7 @@ class HomePage extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: context.colorTheme.surface,
       body: postState.posts.when(
         data: (postsList) {
           return ListView(

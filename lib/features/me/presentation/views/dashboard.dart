@@ -3,6 +3,7 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
+import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/theme/spacing.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -28,20 +29,25 @@ class _MePageState extends ConsumerState<MePage> {
     final supabaseClient = Supabase.instance.client;
 
     ref.listen(meStateNotifierProvider, (_, __) {});
+    return Scaffold(
+      backgroundColor: context.colorTheme.surface,
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(Spacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Gap(Spacing.xl),
-          const _ProfileHeader(),
-          const Gap(Spacing.lg),
-          const _UserPostsSection(),
-          const _LogoutButton(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(Spacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Gap(Spacing.xl),
+            const _ProfileHeader(),
+            const Gap(Spacing.lg),
+            const _UserPostsSection(),
+            const _LogoutButton(),
+          ],
+        ),
       ),
     );
+
+    return SingleChildScrollView(padding: const EdgeInsets.all(Spacing.lg));
   }
 }
 

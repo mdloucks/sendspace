@@ -9,21 +9,28 @@ import 'package:sendspace/features/me/presentation/views/dashboard.dart';
 import 'package:sendspace/features/record/presentation/views/dashboard.dart';
 import 'package:sendspace/routes/app_routes.dart';
 
+// TODO: this is only out here to prevent hot reload from sending you to the home page.
+// In general, we should avoid putting ephemeral state in global scope.
+int selectedIndex = 0;
+
 class MainScaffold extends ConsumerStatefulWidget {
-  final Widget child;
-  const MainScaffold({super.key, required this.child});
+  const MainScaffold({super.key});
 
   @override
   ConsumerState<MainScaffold> createState() => _MainScaffoldState();
 }
 
 class _MainScaffoldState extends ConsumerState<MainScaffold> {
-  int _selectedIndex = 0;
-  final _controller = PageController();
+  late final _controller = PageController(initialPage: selectedIndex);
+
+  @override
+  initState() {
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
     _controller.animateToPage(
       index,
@@ -45,12 +52,13 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
     });
 
     return Scaffold(
+      backgroundColor: context.colorTheme.surface,
       body: SafeArea(
         child: PageView(
           controller: _controller,
           onPageChanged: (index) {
             setState(() {
-              _selectedIndex = index;
+              selectedIndex = index;
             });
           },
           children: [
@@ -61,10 +69,12 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: context.colorTheme.primary,
-        unselectedItemColor: context.colorTheme.secondary,
+        unselectedItemColor: context.colorTheme.onSurface,
+        backgroundColor: context.colorTheme.surfaceDim,
+
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:sendspace/theme/app_colors.dart';
+import 'package:sendspace/theme/app_theme.dart';
 import 'text_theme.dart';
 
-final ThemeData lightThemeData = ThemeData(
+final ThemeData lightThemeData = AppTheme.baseTheme.copyWith(
   brightness: Brightness.light,
   primaryColor: AppColors.primary,
   colorScheme: ColorScheme.light(
+    brightness: Brightness.light,
     primary: AppColors.primary,
+    onPrimary: AppColors.onPrimary,
     secondary: AppColors.secondary,
-    tertiary: AppColors.accent,
-    onPrimary: Colors.white,
+    onSecondary: AppColors.onSecondary,
     surface: AppColors.surface,
-    onSurface: AppColors.text,
+    onSurface: AppColors.onSurface,
+    error: AppColors.error,
+    onError: Colors.white,
   ),
+
   scaffoldBackgroundColor: AppColors.background,
-  textTheme: appTextTheme,
+  textTheme: appLightTextTheme,
 );

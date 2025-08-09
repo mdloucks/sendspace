@@ -2,9 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sendspace/app.dart';
 import 'package:sendspace/features/auth_page.dart';
-import 'package:sendspace/features/home/presentation/views/dashboard.dart';
-import 'package:sendspace/features/me/presentation/views/dashboard.dart';
-import 'package:sendspace/features/record/presentation/views/dashboard.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -46,24 +43,13 @@ GoRouter getAppRouter(AppRoute initialPath) => GoRouter(
     ),
     ShellRoute(
       builder: (context, state, child) {
-        return MainScaffold(child: child);
+        return MainScaffold(key: Key('k_main_scaffold'));
       },
       routes: [
-        // TODO: find way to fade into home rather than the weird page transition
         GoRoute(
           path: AppRoute.home.path,
           name: AppRoute.home.name,
-          builder: (context, state) => const HomePage(),
-        ),
-        GoRoute(
-          path: AppRoute.record.path,
-          name: AppRoute.record.name,
-          builder: (context, state) => const RecordPage(),
-        ),
-        GoRoute(
-          path: AppRoute.me.path,
-          name: AppRoute.me.name,
-          builder: (context, state) => MePage(),
+          builder: (context, state) => const SizedBox.shrink(),
         ),
       ],
     ),
