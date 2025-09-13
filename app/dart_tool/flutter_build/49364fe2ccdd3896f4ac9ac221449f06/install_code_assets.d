@@ -1,0 +1,1 @@
+ /Users/mloucks/Programming/sendspace/.dart_tool/flutter_build/49364fe2ccdd3896f4ac9ac221449f06/native_assets.json: 
