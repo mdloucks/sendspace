@@ -5,6 +5,7 @@ import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
+import 'package:sendspace/features/me/presentation/widgets/me_app_bar.dart';
 import 'package:sendspace/theme/spacing.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -26,28 +27,32 @@ class _MePageState extends ConsumerState<MePage> {
 
   @override
   Widget build(BuildContext context) {
-    final supabaseClient = Supabase.instance.client;
-
     ref.listen(meStateNotifierProvider, (_, __) {});
-    return Scaffold(
-      backgroundColor: context.colorTheme.surface,
 
-      body: Padding(
-        padding: const EdgeInsets.all(Spacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(Spacing.xl),
-            const _ProfileHeader(),
-            const Gap(Spacing.lg),
-            const _UserPostsSection(),
-            const _LogoutButton(),
-          ],
-        ),
-      ),
+    final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
+
+    return user.when(
+      data: (userData) {
+        return Scaffold(
+          backgroundColor: context.colorTheme.surface,
+          body: CustomScrollView(
+            slivers: [
+              MeAppBar(user: userData),
+              SliverPadding(
+                padding: EdgeInsetsGeometry.only(top: Spacing.md),
+                sliver: _UserPostsSection(),
+              ),
+            ],
+          ),
+        );
+      },
+      error: (err, st) {
+        return Text('something went wrong');
+      },
+      loading: () {
+        return CircularProgressIndicator();
+      },
     );
-
-    return SingleChildScrollView(padding: const EdgeInsets.all(Spacing.lg));
   }
 }
 
@@ -66,45 +71,6 @@ class _LogoutButton extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends ConsumerWidget {
-  const _ProfileHeader({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
-
-    return user.when(
-      data:
-          (user) => Row(
-            children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundImage: NetworkImage(user.profileImageUrl ?? ''),
-                backgroundColor: Colors.grey[300],
-              ),
-              const Gap(Spacing.lg),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.displayName,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  if (user.climbingLevel != null)
-                    Text(
-                      'Climbing Level: ${user.climbingLevel}',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                ],
-              ),
-            ],
-          ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Text('Error loading profile: $err'),
-    );
-  }
-}
-
 class _UserPostsSection extends ConsumerWidget {
   const _UserPostsSection({super.key});
 
@@ -113,22 +79,43 @@ class _UserPostsSection extends ConsumerWidget {
     final posts = ref.watch(meStateNotifierProvider.select((s) => s.posts));
 
     return posts.when(
-      data:
-          (posts) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Your Sends',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const Gap(Spacing.md),
-              if (posts.isEmpty)
-                const Text('You haven’t posted any climbs yet.'),
-              ...posts.map((post) => _PostCard(post.title, post.grade ?? '')),
-            ],
+      data: (posts) {
+        if (posts.isEmpty) {
+          return SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('You haven’t posted any climbs yet.'),
+            ),
+          );
+        }
+
+        return SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          // make drop-in animation with this https://www.youtube.com/watch?v=EsAz93BRRx4
+          sliver: SliverAnimatedGrid(
+            initialItemCount: posts.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+            ),
+            itemBuilder: (context, index, animation) {
+              final post = posts[index];
+              return FadeTransition(
+                opacity: animation,
+                child: _PostCard(post.title, post.grade ?? ''),
+              );
+            },
           ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Text('Error loading posts: $err'),
+        );
+      },
+      loading:
+          () => SliverToBoxAdapter(
+            child: Center(child: CircularProgressIndicator()),
+          ),
+      error:
+          (err, stack) =>
+              SliverToBoxAdapter(child: Text('Error loading posts: $err')),
     );
   }
 }
@@ -143,15 +130,62 @@ class _PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: Spacing.md),
-      child: Padding(
-        padding: const EdgeInsets.all(Spacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.bodyLarge),
-            Text('Grade: $grade'),
-          ],
-        ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300, width: 1),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          // Background image
+          SizedBox(
+            height: 180,
+            width: double.infinity,
+            child: Image.network(
+              "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Gradient overlay
+          Container(
+            height: 180,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.transparent, Colors.black87],
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+              ),
+            ),
+          ),
+          // Positioned text to remove extra whitespace
+          Positioned(
+            left: Spacing.lg,
+            right: Spacing.lg,
+            bottom: Spacing.lg,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // important to shrink to content
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const Gap(Spacing.sm),
+                Text(
+                  grade,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
