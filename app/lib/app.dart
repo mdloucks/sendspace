@@ -68,24 +68,22 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: context.colorTheme.primary,
-        unselectedItemColor: context.colorTheme.onSurface,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
         backgroundColor: context.colorTheme.surfaceDim,
-
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+        indicatorColor: context.colorTheme.primary,
+        onDestinationSelected: _onItemTapped,
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
             label: AppRoute.home.name.firstLetterCapitalized(),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
+          NavigationDestination(
+            icon: const Icon(Icons.notes_outlined),
             label: AppRoute.record.name.firstLetterCapitalized(),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline_outlined),
             label: AppRoute.me.name.firstLetterCapitalized(),
           ),
         ],
