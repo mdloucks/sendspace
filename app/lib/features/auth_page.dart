@@ -91,18 +91,17 @@ class _AuthPageState extends ConsumerState<AuthPage> {
           decoration: const InputDecoration(labelText: 'Email'),
           keyboardType: TextInputType.emailAddress,
         ),
+        const Gap(Spacing.lg),
         TextField(
           controller: _passwordController,
           decoration: const InputDecoration(labelText: 'Password'),
           obscureText: true,
         ),
         const Gap(Spacing.md),
-        ElevatedButton(
+        ElevatedButton.icon(
           onPressed: () => _authenticate(ref),
-          child: Text(
-            _isLogin ? 'Login' : 'Sign Up',
-            style: context.textTheme.bodyMedium,
-          ),
+          icon: Icon(Icons.lock_outlined),
+          label: Text(_isLogin ? 'Login' : 'Sign Up'),
         ),
         TextButton(
           onPressed: () => setState(() => _isLogin = !_isLogin),
