@@ -41,7 +41,9 @@ class SendSpaceApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: getAppRouter(initialPath),
       title: 'SendSpace',
-      theme: context.isDarkMode ? AppTheme.dark : AppTheme.light,
+      theme: AppTheme.baseTheme(
+        context.isDarkMode ? AppTheme.dark : AppTheme.light,
+      ),
     );
   }
 }
