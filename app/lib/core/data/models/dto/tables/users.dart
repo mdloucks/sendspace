@@ -26,6 +26,7 @@ class UsersRow extends SupabaseDataRow {
   UsersRow({
     required String id,
     required String displayName,
+    required String userName,
     String? bio,
     String? profileImageUrl,
     String? climbingLevel,
@@ -34,6 +35,7 @@ class UsersRow extends SupabaseDataRow {
   }) : super({
          'id': supaSerialize(id),
          'display_name': supaSerialize(displayName),
+         'user_name': supaSerialize(userName),
          if (bio != null) 'bio': supaSerialize(bio),
          if (profileImageUrl != null)
            'profile_image_url': supaSerialize(profileImageUrl),
@@ -70,6 +72,13 @@ class UsersRow extends SupabaseDataRow {
   /// Display Name
   String get displayName => getField<String>(displayNameField)!;
   set displayName(String value) => setField<String>(displayNameField, value);
+
+  /// User Name field name
+  static const String userNameField = 'user_name';
+
+  /// User Name
+  String get userName => getField<String>(userNameField)!;
+  set userName(String value) => setField<String>(userNameField, value);
 
   /// Bio field name
   static const String bioField = 'bio';
@@ -115,6 +124,7 @@ class UsersRow extends SupabaseDataRow {
   UsersRow copyWith({
     String? id,
     String? displayName,
+    String? userName,
     String? bio,
     String? profileImageUrl,
     String? climbingLevel,
@@ -123,6 +133,7 @@ class UsersRow extends SupabaseDataRow {
   }) => UsersRow.fromJson({
     'id': supaSerialize(id) ?? data['id'],
     'display_name': supaSerialize(displayName) ?? data['display_name'],
+    'user_name': supaSerialize(userName) ?? data['user_name'],
     'bio': supaSerialize(bio) ?? data['bio'],
     'profile_image_url':
         supaSerialize(profileImageUrl) ?? data['profile_image_url'],
@@ -132,4 +143,4 @@ class UsersRow extends SupabaseDataRow {
   });
 }
 
-/// Date: 2025-08-05 23:44:48.436606
+/// Date: 2025-09-14 19:21:40.172668

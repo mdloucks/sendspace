@@ -117,11 +117,12 @@ VALUES (
 );
 
 -- Insert corresponding user profiles (public.users) for your test users
-INSERT INTO public.users (id, display_name, bio, profile_image_url, climbing_level)
+INSERT INTO public.users (id, display_name, user_name, bio, profile_image_url, climbing_level)
 VALUES
   (
     '11111111-1111-1111-1111-111111111111',
     'User One',
+    'username1',
     'Just getting started with climbing.',
     'https://example.com/avatars/user1.png',
     'V3'
@@ -129,6 +130,7 @@ VALUES
   (
     '22222222-2222-2222-2222-222222222222',
     'User Two',
+    'username2',
     'Experienced gym rat and outdoor climber.',
     'https://example.com/avatars/user2.png',
     'V7'

@@ -77,4 +77,4 @@ class ClimbTypesRow extends SupabaseDataRow {
       });
 }
 
-/// Date: 2025-08-05 23:44:48.433129
+/// Date: 2025-09-14 19:21:40.166824
