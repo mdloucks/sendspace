@@ -10,7 +10,7 @@ import 'package:sendspace/features/record/presentation/views/dashboard.dart';
 import 'package:sendspace/routes/app_routes.dart';
 
 // TODO: this is only out here to prevent hot reload from sending you to the home page.
-// In general, we should avoid putting ephemeral state in global scope.
+// In theory, this should be ephemeral state.
 int selectedIndex = 0;
 
 class MainScaffold extends ConsumerStatefulWidget {
