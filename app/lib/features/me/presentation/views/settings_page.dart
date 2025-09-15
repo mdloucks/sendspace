@@ -1,0 +1,165 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendspace/core/application/auth_state.codegen.dart';
+import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
+import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
+import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
+import 'package:sendspace/features/me/application/me_state.codegen.dart';
+import 'package:sendspace/features/me/presentation/widgets/me_profile_header.dart';
+
+class SettingsPage extends ConsumerStatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends ConsumerState<SettingsPage> {
+  late final TextEditingController _usernameController;
+  late final TextEditingController _displaynameController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // You can provide default values here
+    _usernameController = TextEditingController();
+    _displaynameController = TextEditingController();
+
+    // Optionally, you could populate these from your user data later
+    Future.microtask(() {
+      final user = ref.read(meStateNotifierProvider).user;
+      user.whenData((userData) {
+        _usernameController.text = userData.userName ?? '';
+        _displaynameController.text = userData.displayName ?? '';
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _displaynameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
+
+    return user.when(
+      data: (userData) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Settings"),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                final newUserData = user.value?.copyWith(
+                  userName: _usernameController.value.text,
+                  displayName: _displaynameController.value.text,
+                );
+
+                if (newUserData != null) {
+                  ref
+                      .read(meStateNotifierProvider.notifier)
+                      .upsertUserProfile(newUserData);
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
+          body: ListView(
+            children: [
+              const SizedBox(height: 24),
+              // Profile section
+              MeProfileHeader.large(
+                user: userData,
+                trailing: ElevatedButton.icon(
+                  onPressed: () {
+                    // TODO: open image picker
+                  },
+                  icon: const Icon(Icons.camera_alt_outlined, size: 18),
+                  label: const Text("Change"),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 120, // fixed width for the heading
+                      child: Text(
+                        "Username",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(
+                          hintText: "Enter username",
+                          border: OutlineInputBorder(),
+                          isDense: true, // tighter vertical padding
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        "Display name",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _displaynameController,
+                        decoration: const InputDecoration(
+                          hintText: "Enter display name",
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Logout
+              Center(
+                child: SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.logout),
+                    label: const Text("Log Out"),
+                    onPressed: () async {
+                      await ref.read(repositoryBundleProvider).auth.signOut();
+                      ref.invalidate(authStateNotifierProvider);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red, // overrides theme
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      error: (err, st) => const MeErrorIndicator(),
+      loading: () => const LoadingIndicator(),
+    );
+  }
+}

@@ -2,9 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/data/models/dto/tables/users.dart';
-import 'package:sendspace/core/data/repositories/post_repository.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
-import 'package:sendspace/core/data/repositories/user_repository.dart';
 import 'package:sendspace/core/data/types/result.dart';
 
 part 'me_state.codegen.freezed.dart';
@@ -20,15 +18,8 @@ abstract class MeState with _$MeState {
 
 @riverpod
 class MeStateNotifier extends _$MeStateNotifier {
-  late final UserRepository _userRepository;
-  late final PostRepository _postRepository;
-
   @override
   MeState build() {
-    final bundle = ref.read(repositoryBundleProvider);
-    _userRepository = bundle.users;
-    _postRepository = bundle.posts;
-
     return MeState(
       user: const AsyncValue.loading(),
       posts: const AsyncValue.loading(),
@@ -42,8 +33,10 @@ class MeStateNotifier extends _$MeStateNotifier {
   Future<void> _loadUserProfile() async {
     state = state.copyWith(user: const AsyncValue.loading());
 
+    final userRepository = ref.watch(repositoryBundleProvider).users;
+
     try {
-      final result = await _userRepository.getCurrentUserProfile();
+      final result = await userRepository.getCurrentUserProfile();
       switch (result) {
         case ResultData<UsersRow>():
           state = state.copyWith(user: AsyncValue.data(result.data));
@@ -57,8 +50,11 @@ class MeStateNotifier extends _$MeStateNotifier {
 
   Future<void> _loadUserPosts() async {
     state = state.copyWith(posts: const AsyncValue.loading());
+
+    final postRepository = ref.watch(repositoryBundleProvider).posts;
+
     try {
-      final result = await _postRepository.getUserPosts();
+      final result = await postRepository.getUserPosts();
       switch (result) {
         case ResultData<List<PostsRow>>():
           state = state.copyWith(posts: AsyncValue.data(result.data));
@@ -70,13 +66,11 @@ class MeStateNotifier extends _$MeStateNotifier {
     }
   }
 
-  Future<void> refresh() async {
-    await init(); // or you can split out the two loads again if needed
-  }
-
-  Future<void> updateProfile(UsersRow user) async {
+  Future<void> upsertUserProfile(UsersRow user) async {
+    state = state.copyWith(user: const AsyncValue.loading());
+    final userRepository = ref.watch(repositoryBundleProvider).users;
     try {
-      await _userRepository.upsertUserProfile(user: user);
+      await userRepository.upsertUserProfile(user: user);
       await _loadUserProfile();
     } catch (e, st) {
       state = state.copyWith(user: AsyncValue.error(e, st));

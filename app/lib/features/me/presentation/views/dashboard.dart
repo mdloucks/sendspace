@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendspace/core/application/auth_state.codegen.dart';
-import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_app_bar.dart';
 import 'package:sendspace/theme/spacing.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MePage extends ConsumerStatefulWidget {
   const MePage({super.key});
@@ -27,7 +25,13 @@ class _MePageState extends ConsumerState<MePage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(meStateNotifierProvider, (_, __) {});
+    ref.listen(meStateNotifierProvider, (prev, next) {
+      if (next.user is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile failed to update.")),
+        );
+      }
+    });
 
     final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
 
@@ -38,6 +42,9 @@ class _MePageState extends ConsumerState<MePage> {
           body: CustomScrollView(
             slivers: [
               MeAppBar(user: userData),
+
+              // TODO: make tiles fade out as you scroll. It's tricky because of the slivers
+              // would love to just use a ShaderMask
               SliverPadding(
                 padding: EdgeInsetsGeometry.only(top: Spacing.md),
                 sliver: _UserPostsSection(),
@@ -47,26 +54,27 @@ class _MePageState extends ConsumerState<MePage> {
         );
       },
       error: (err, st) {
-        return Text('something went wrong');
+        return MeErrorIndicator(
+          onRetry: () {
+            // ignore: unused_result
+            ref.refresh(meStateNotifierProvider);
+          },
+        );
       },
-      loading: () {
-        return CircularProgressIndicator();
-      },
-    );
-  }
-}
-
-class _LogoutButton extends ConsumerWidget {
-  const _LogoutButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return TextButton(
-      onPressed: () async {
-        await ref.read(repositoryBundleProvider).auth.signOut();
-        ref.invalidate(authStateNotifierProvider);
-      },
-      child: const Text('log out'),
+      loading:
+          () => Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("Loading..."),
+                  SizedBox(height: 16),
+                  CircularProgressIndicator.adaptive(),
+                ],
+              ),
+            ),
+          ),
     );
   }
 }
@@ -91,20 +99,18 @@ class _UserPostsSection extends ConsumerWidget {
 
         return SliverPadding(
           padding: const EdgeInsets.all(16.0),
+
           // make drop-in animation with this https://www.youtube.com/watch?v=EsAz93BRRx4
-          sliver: SliverAnimatedGrid(
-            initialItemCount: posts.length,
+          sliver: SliverGrid.builder(
+            itemCount: posts.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
             ),
-            itemBuilder: (context, index, animation) {
+            itemBuilder: (context, index) {
               final post = posts[index];
-              return FadeTransition(
-                opacity: animation,
-                child: _PostCard(post.title, post.grade ?? ''),
-              );
+              return _PostCard(post.title, post.grade ?? '');
             },
           ),
         );
