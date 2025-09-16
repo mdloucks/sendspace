@@ -1,4 +1,9 @@
+import 'dart:io';
+import 'dart:isolate';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
@@ -6,6 +11,8 @@ import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
 import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_profile_header.dart';
+import 'package:sendspace/features/record/application/record_state.codegen.dart';
+import 'package:sendspace/theme/spacing.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -17,21 +24,20 @@ class SettingsPage extends ConsumerStatefulWidget {
 class _SettingsPageState extends ConsumerState<SettingsPage> {
   late final TextEditingController _usernameController;
   late final TextEditingController _displaynameController;
+  File? _selectedImage;
 
   @override
   void initState() {
     super.initState();
 
-    // You can provide default values here
     _usernameController = TextEditingController();
     _displaynameController = TextEditingController();
 
-    // Optionally, you could populate these from your user data later
     Future.microtask(() {
       final user = ref.read(meStateNotifierProvider).user;
       user.whenData((userData) {
-        _usernameController.text = userData.userName ?? '';
-        _displaynameController.text = userData.displayName ?? '';
+        _usernameController.text = userData.userName;
+        _displaynameController.text = userData.displayName;
       });
     });
   }
@@ -41,6 +47,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     _usernameController.dispose();
     _displaynameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    // users_profile_images
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _selectedImage = File(result.files.single.path!);
+      });
+    }
   }
 
   @override
@@ -63,7 +83,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 if (newUserData != null) {
                   ref
                       .read(meStateNotifierProvider.notifier)
-                      .upsertUserProfile(newUserData);
+                      .upsertUserProfile(
+                        user: newUserData,
+                        file: _selectedImage,
+                      );
                 }
                 Navigator.of(context).pop();
               },
@@ -75,10 +98,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               // Profile section
               MeProfileHeader.large(
                 user: userData,
+                localAssetPath: _selectedImage?.path,
                 trailing: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: open image picker
-                  },
+                  onPressed: _pickImage,
                   icon: const Icon(Icons.camera_alt_outlined, size: 18),
                   label: const Text("Change"),
                 ),
@@ -101,8 +123,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         controller: _usernameController,
                         decoration: const InputDecoration(
                           hintText: "Enter username",
-                          border: OutlineInputBorder(),
-                          isDense: true, // tighter vertical padding
+                          isDense: true,
                         ),
                       ),
                     ),
@@ -127,7 +148,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         controller: _displaynameController,
                         decoration: const InputDecoration(
                           hintText: "Enter display name",
-                          border: OutlineInputBorder(),
                           isDense: true,
                         ),
                       ),
@@ -135,6 +155,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ],
                 ),
               ),
+              const Gap(Spacing.lg),
 
               // Logout
               Center(

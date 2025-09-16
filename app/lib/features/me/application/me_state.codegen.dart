@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
@@ -66,11 +68,11 @@ class MeStateNotifier extends _$MeStateNotifier {
     }
   }
 
-  Future<void> upsertUserProfile(UsersRow user) async {
+  Future<void> upsertUserProfile({required UsersRow user, File? file}) async {
     state = state.copyWith(user: const AsyncValue.loading());
     final userRepository = ref.watch(repositoryBundleProvider).users;
     try {
-      await userRepository.upsertUserProfile(user: user);
+      await userRepository.upsertUserProfile(user: user, file: file);
       await _loadUserProfile();
     } catch (e, st) {
       state = state.copyWith(user: AsyncValue.error(e, st));

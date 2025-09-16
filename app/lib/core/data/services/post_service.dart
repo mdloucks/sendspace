@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/failures/failure.dart';
+import 'package:sendspace/core/mixins/s3_bucket_mixin.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class PostService {
   Future<void> createPost({required PostsRow post, File? videoFile});
 
   Future<List<PostsRow>> getUserPosts();
-  Future<void> uploadVideo(File file);
 }
 
-class SupabasePostService extends PostService {
+class SupabasePostService extends PostService with S3BucketMixin {
   final SupabaseClient _client;
 
   SupabasePostService(this._client);
@@ -30,7 +30,12 @@ class SupabasePostService extends PostService {
 
     String? videoUrl;
     if (videoFile != null) {
-      videoUrl = await uploadVideo(videoFile);
+      videoUrl = await uploadObject(
+        client: _client,
+        bucketName: bucketName,
+        file: videoFile,
+        objectKey: videoFile.path.trim(),
+      );
     }
 
     final json =
@@ -66,22 +71,5 @@ class SupabasePostService extends PostService {
     } catch (e) {
       return Future.error(e);
     }
-  }
-
-  @override
-  /// Uploads a video and returns the public URL
-  Future<String> uploadVideo(File videoFile) async {
-    final fileName = path.basename(videoFile.path);
-    final fileKey = 'uploads/$fileName';
-
-    final response = await _client.storage
-        .from(bucketName)
-        .upload(fileKey, videoFile);
-
-    if (response.isEmpty) {
-      throw Exception('Video upload failed');
-    }
-
-    return _client.storage.from(bucketName).getPublicUrl(fileKey);
   }
 }

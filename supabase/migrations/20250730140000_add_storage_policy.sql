@@ -28,3 +28,18 @@ create policy "Authenticated users can insert posts"
   with check (
     auth.uid() = user_id
   );
+
+-- For user profile pictures
+
+-- Create the bucket if it doesn't already exist
+insert into storage.buckets (id, name, public)
+values ('users_profile_images', 'users_profile_images', true)
+on conflict (id) do nothing;
+
+-- Create a policy allowing authenticated users to insert into post_videos bucket
+create policy "Authenticated users can upload to users_profile_images"
+  on storage.objects
+  for insert
+  with check (
+    bucket_id = 'users_profile_images' AND auth.role() = 'authenticated'
+  );
