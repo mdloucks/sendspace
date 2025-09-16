@@ -7,6 +7,7 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
+import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
 import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
@@ -112,7 +113,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 120, // fixed width for the heading
+                      width: 120,
                       child: Text(
                         "Username",
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -169,7 +170,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ref.invalidate(authStateNotifierProvider);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // overrides theme
+                      backgroundColor: context.colorTheme.error,
                       foregroundColor: Colors.white,
                     ),
                   ),
