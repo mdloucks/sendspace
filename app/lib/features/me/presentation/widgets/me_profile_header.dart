@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:sendspace/core/data/models/dto/tables/users.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
-import 'package:sendspace/features/me/presentation/views/settings_page.dart';
+import 'package:sendspace/features/me/presentation/widgets/profile_avatar.dart';
 import 'package:sendspace/theme/spacing.dart';
 
 class MeProfileHeader extends StatelessWidget {
@@ -19,6 +19,7 @@ class MeProfileHeader extends StatelessWidget {
     required this.maxTextSize,
     required this.user,
     required this.percentage,
+    this.localAssetPath,
     this.trailing,
   });
 
@@ -27,6 +28,7 @@ class MeProfileHeader extends StatelessWidget {
     Key? key,
     required UsersRow user,
     Widget? trailing,
+    String? localAssetPath,
   }) {
     return MeProfileHeader(
       key: key,
@@ -37,11 +39,16 @@ class MeProfileHeader extends StatelessWidget {
       user: user,
       percentage: 1,
       trailing: trailing,
+      localAssetPath: localAssetPath,
     );
   }
 
   /// Condensed profile header, will wrap smaller elements.
-  factory MeProfileHeader.small({Key? key, required UsersRow user}) {
+  factory MeProfileHeader.small({
+    Key? key,
+    required UsersRow user,
+    String? localAssetPath,
+  }) {
     return MeProfileHeader(
       key: key,
       minImageSize: 40.0,
@@ -50,6 +57,7 @@ class MeProfileHeader extends StatelessWidget {
       maxTextSize: 20.0,
       user: user,
       percentage: 0.3,
+      localAssetPath: localAssetPath,
     );
   }
 
@@ -61,6 +69,7 @@ class MeProfileHeader extends StatelessWidget {
   final UsersRow user;
   final double percentage;
   final Widget? trailing;
+  final String? localAssetPath;
 
   @override
   Widget build(BuildContext context) {
@@ -100,18 +109,14 @@ class MeProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Gap(Spacing.sm),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.network(
-              "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
-              width: imageSize,
-              height: imageSize,
-              fit: BoxFit.cover,
-            ),
+          ProfileAvatar(
+            size: imageSize,
+            networkUrl: user.profileImageUrl,
+            localAssetPath: localAssetPath,
           ),
           Gap(Spacing.lg),
           Expanded(
+            flex: 5,
             child: Flex(
               direction: isExpanded ? Axis.vertical : Axis.horizontal,
               crossAxisAlignment:
@@ -143,7 +148,7 @@ class MeProfileHeader extends StatelessWidget {
             ),
           ),
           if (isExpanded) trailing ?? const SizedBox.shrink(),
-          Gap(Spacing.lg),
+          Spacer(flex: 1),
         ],
       ),
     );
