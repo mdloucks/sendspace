@@ -61,16 +61,16 @@ class MeAppBar extends StatelessWidget {
                 right: 16,
                 child: Opacity(
                   opacity: pow(percentage, 4).toDouble(),
-                  child: Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildDataPoint("Climbs", 1722),
-                        _buildDataPoint("Followers", 50),
-                        _buildDataPoint("Following", 16),
-                        _buildDataPoint("Projects", 3),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // TODO: These overflow when text is scaled up a ton. I don't have
+                      // an easy fix in mind besides hiding one of them.
+                      _buildDataPoint("Climbs", 1722),
+                      _buildDataPoint("Followers", 50),
+                      _buildDataPoint("Following", 16),
+                      _buildDataPoint("Projects", 3),
+                    ],
                   ),
                 ),
               ),
