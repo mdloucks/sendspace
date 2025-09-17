@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_app_bar.dart';
+import 'package:sendspace/features/me/presentation/widgets/post_detail_page.dart';
 import 'package:sendspace/theme/spacing.dart';
 
 class MePage extends ConsumerStatefulWidget {
@@ -110,7 +112,7 @@ class _UserPostsSection extends ConsumerWidget {
             ),
             itemBuilder: (context, index) {
               final post = posts[index];
-              return _PostCard(post.title, post.grade ?? '');
+              return _PostCard(post);
             },
           ),
         );
@@ -127,71 +129,80 @@ class _UserPostsSection extends ConsumerWidget {
 }
 
 class _PostCard extends StatelessWidget {
-  final String title;
-  final String grade;
+  final PostsRow post;
 
-  const _PostCard(this.title, this.grade, {super.key});
+  const _PostCard(this.post, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: Spacing.md),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade300, width: 1),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          // Background image
-          SizedBox(
-            height: 180,
-            width: double.infinity,
-            child: Image.network(
-              "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
-              fit: BoxFit.cover,
-            ),
-          ),
-          // Gradient overlay
-          Container(
-            height: 180,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.transparent, Colors.black87],
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
+    return GestureDetector(
+      onTap: () {
+        print(post?.videoUrl);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => PostDetailPage(post: post)),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: Spacing.md),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.shade300, width: 1),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            // Background image
+            SizedBox(
+              height: 180,
+              width: double.infinity,
+              child: Image.network(
+                "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-          // Positioned text to remove extra whitespace
-          Positioned(
-            left: Spacing.lg,
-            right: Spacing.lg,
-            bottom: Spacing.lg,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min, // important to shrink to content
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+            // Gradient overlay
+            Container(
+              height: 180,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.transparent, Colors.black87],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
                 ),
-                const Gap(Spacing.sm),
-                Text(
-                  grade,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            // Positioned text to remove extra whitespace
+            Positioned(
+              left: Spacing.lg,
+              right: Spacing.lg,
+              bottom: Spacing.lg,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize:
+                    MainAxisSize.min, // important to shrink to content
+                children: [
+                  Text(
+                    post.title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const Gap(Spacing.sm),
+                  Text(
+                    post?.grade ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
