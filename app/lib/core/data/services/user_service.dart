@@ -35,7 +35,7 @@ class SupabaseUserService extends UserService with S3BucketMixin {
   Future<void> upsertUserProfile(UsersRow user, File? file) async {
     try {
       if (file != null) {
-        final objectKey = "${_client.auth.currentUser?.id}.${Uuid().v4()}";
+        final objectKey = generateObjectKeyFromSupabaseClient(_client);
         final publicUrl = await uploadObject(
           client: _client,
           bucketName: 'users_profile_images',

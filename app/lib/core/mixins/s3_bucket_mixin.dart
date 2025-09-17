@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 mixin S3BucketMixin {
   /// Uploads an object to S3 and returns the public URL
@@ -20,4 +21,7 @@ mixin S3BucketMixin {
 
     return client.storage.from(bucketName).getPublicUrl(objectKey);
   }
+
+  String generateObjectKeyFromSupabaseClient(SupabaseClient client) =>
+      "${client.auth.currentUser?.id}.${Uuid().v4()}";
 }
