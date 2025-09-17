@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/application/post_state.codegen.dart';
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
@@ -23,13 +24,16 @@ class HomePage extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: context.colorTheme.surface,
+      backgroundColor: context.colorScheme.surface,
       body: postState.posts.when(
         data: (postsList) {
           return ListView(
             padding: const EdgeInsets.all(Spacing.lg),
             children: [
-              Text('Welcome!', style: context.textTheme.displayLarge),
+              Text(
+                'Welcome!',
+                style: context.textTheme.permanentMarker().displayLarge,
+              ),
               const SizedBox(height: Spacing.lg),
               if (postsList.isEmpty)
                 const Text('You haven’t posted anything yet.')

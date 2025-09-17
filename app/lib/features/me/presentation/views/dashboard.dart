@@ -38,7 +38,7 @@ class _MePageState extends ConsumerState<MePage> {
     return user.when(
       data: (userData) {
         return Scaffold(
-          backgroundColor: context.colorTheme.surface,
+          backgroundColor: context.colorScheme.surface,
           body: CustomScrollView(
             slivers: [
               MeAppBar(user: userData),

@@ -170,7 +170,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ref.invalidate(authStateNotifierProvider);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: context.colorTheme.error,
+                      backgroundColor: context.colorScheme.error,
                       foregroundColor: Colors.white,
                     ),
                   ),

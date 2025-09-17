@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/routes/app_routes.dart';
-import 'package:sendspace/theme/app_colors.dart';
 import 'package:sendspace/theme/spacing.dart';
 
 class AuthPage extends ConsumerStatefulWidget {
@@ -115,7 +114,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
         Text(
           error ?? '',
           style: context.textTheme.labelLarge?.copyWith(
-            color: AppColors.accent,
+            color: context.colorScheme.onPrimary,
           ),
         ),
       ],

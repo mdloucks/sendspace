@@ -95,14 +95,14 @@ class MeProfileHeader extends StatelessWidget {
     final scaledGradeVStyle = baseNameStyle.copyWith(
       fontSize: scaledTextSize * 0.9,
       fontWeight: FontWeight.bold,
-      color: context.colorTheme.primary,
+      color: context.colorScheme.primary,
       shadows: [const Shadow(blurRadius: 4, color: Colors.black45)],
     );
 
     final scaledGradeNumberStyle = baseNameStyle.copyWith(
       fontSize: scaledTextSize * 0.7,
       fontWeight: FontWeight.w500,
-      color: context.colorTheme.primary,
+      color: context.colorScheme.primary,
     );
 
     return Padding(

@@ -8,6 +8,7 @@ import 'package:sendspace/features/home/presentation/views/dashboard.dart';
 import 'package:sendspace/features/me/presentation/views/dashboard.dart';
 import 'package:sendspace/features/record/presentation/views/dashboard.dart';
 import 'package:sendspace/routes/app_routes.dart';
+import 'package:sendspace/theme/text_theme.dart';
 
 // TODO: this is only out here to prevent hot reload from sending you to the home page.
 // In theory, this should be ephemeral state.
@@ -24,22 +25,6 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
   late final _controller = PageController(initialPage: selectedIndex);
 
   @override
-  initState() {
-    super.initState();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-    _controller.animateToPage(
-      index,
-      duration: Duration(milliseconds: 250),
-      curve: Curves.easeOut,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     ref.listen(authStateNotifierProvider.select((state) => state.userId), (
       previous,
@@ -52,7 +37,7 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
     });
 
     return Scaffold(
-      backgroundColor: context.colorTheme.surface,
+      backgroundColor: context.colorScheme.surface,
       body: SafeArea(
         child: PageView(
           controller: _controller,
@@ -70,8 +55,11 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
-        backgroundColor: context.colorTheme.surfaceDim,
-        indicatorColor: context.colorTheme.primary,
+        backgroundColor: context.colorScheme.surface,
+        labelTextStyle: WidgetStateProperty.all(
+          buildAppTextTheme(context.colorScheme).permanentMarker().bodyMedium,
+        ),
+        indicatorColor: context.colorScheme.tertiary.withValues(alpha: 0.3),
         onDestinationSelected: _onItemTapped,
         destinations: [
           NavigationDestination(
@@ -88,6 +76,22 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
           ),
         ],
       ),
+    );
+  }
+
+  @override
+  initState() {
+    super.initState();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    _controller.animateToPage(
+      index,
+      duration: Duration(milliseconds: 250),
+      curve: Curves.easeOut,
     );
   }
 }

@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/core/presentation/widgets/styled_elevated_button.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
+import 'package:sendspace/theme/spacing.dart';
 
 class RecordPage extends ConsumerWidget {
   const RecordPage({super.key});
@@ -40,10 +43,10 @@ class RecordPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: context.colorTheme.surface,
+      backgroundColor: context.colorScheme.surface,
       appBar: AppBar(title: const Text('Create Post')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(Spacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -61,7 +64,7 @@ class RecordPage extends ConsumerWidget {
                   offset: state.title.length,
                 ),
             ),
-            const SizedBox(height: 16),
+            const Gap(Spacing.md),
             TextField(
               onChanged:
                   (value) => ref
@@ -77,7 +80,7 @@ class RecordPage extends ConsumerWidget {
                   offset: state.description.length,
                 ),
             ),
-            const SizedBox(height: 16),
+            const Gap(Spacing.md),
             DropdownButtonFormField<ClimbTypesRow>(
               value: state.selectedClimbType,
               items:
@@ -96,7 +99,7 @@ class RecordPage extends ConsumerWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16),
+            const Gap(Spacing.md),
             TextField(
               onChanged:
                   (value) => ref
@@ -111,20 +114,21 @@ class RecordPage extends ConsumerWidget {
                   offset: state.grade.length,
                 ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
+            const Gap(Spacing.md),
+            StyledElevatedButton.neutral(
+              context: context,
               onPressed: () => _pickVideo(ref),
               icon: const Icon(Icons.video_library),
-              label: Text(
-                state.selectedVideo == null ? 'Pick Video' : 'Change Video',
+              child: Text(
+                state.selectedVideo == null ? 'Pick video' : 'Change video',
               ),
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _submit(context, ref),
-                child: const Text('Submit Post'),
-              ),
+            const Gap(Spacing.md),
+            StyledElevatedButton.primary(
+              context: context,
+              onPressed: () => _submit(context, ref),
+              icon: Icon(Icons.send_outlined),
+              child: Text('Submit'),
             ),
           ],
         ),

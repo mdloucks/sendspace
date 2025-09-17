@@ -25,7 +25,7 @@ class MeAppBar extends StatelessWidget {
       pinned: true,
       expandedHeight: sliverHeight,
       surfaceTintColor: Colors.transparent,
-      backgroundColor: context.colorTheme.surface,
+      backgroundColor: context.colorScheme.surface,
       collapsedHeight: _minSliverHeight,
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
