@@ -12,7 +12,7 @@ import 'package:sendspace/core/data/types/result.dart';
 part 'record_state.codegen.freezed.dart';
 part 'record_state.codegen.g.dart';
 
-enum FormStatus { loading, ready, submitting, finished, error }
+enum FormStatus { loading, ready, submitting, error }
 
 @freezed
 abstract class RecordState with _$RecordState {
@@ -104,7 +104,7 @@ class RecordStateNotifier extends _$RecordStateNotifier {
 
     switch (result) {
       case ResultData<void>():
-        state = state.copyWith(status: FormStatus.finished);
+        state = RecordState();
       case ResultFailure<void>():
         state = state.copyWith(
           status: FormStatus.error,

@@ -35,7 +35,7 @@ class RecordPage extends ConsumerWidget {
     final state = ref.watch(recordStateNotifierProvider);
 
     if (state.status == FormStatus.loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     if (state.error != null) {
@@ -95,7 +95,7 @@ class RecordPage extends ConsumerWidget {
                       .read(recordStateNotifierProvider.notifier)
                       .setSelectedClimbType(value),
               decoration: const InputDecoration(
-                labelText: 'Climb Type',
+                labelText: 'Climb type',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -106,7 +106,7 @@ class RecordPage extends ConsumerWidget {
                       .read(recordStateNotifierProvider.notifier)
                       .setGrade(value),
               decoration: const InputDecoration(
-                labelText: 'Boulder Grade (e.g., V5)',
+                labelText: 'Grade (e.g., V5, 5.14a, 6a)',
                 border: OutlineInputBorder(),
               ),
               controller: TextEditingController(text: state.grade)
