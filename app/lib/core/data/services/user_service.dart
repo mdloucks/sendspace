@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
 import 'package:sendspace/core/data/models/dto/tables/users.dart';
 import 'package:sendspace/core/mixins/s3_bucket_mixin.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,8 +36,12 @@ class SupabaseUserService extends UserService with S3BucketMixin {
   Future<void> upsertUserProfile(UsersRow user, File? file) async {
     try {
       if (file != null) {
-        final objectKey = generateObjectKeyFromSupabaseClient(_client);
-        final publicUrl = await uploadObject(
+        final objectKey = generateObjectKey(
+          _client,
+          'pfp',
+          path.extension(file.path),
+        );
+        final publicUrl = await uploadObjectFromFile(
           client: _client,
           bucketName: 'users_profile_images',
           file: file,

@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS "public"."posts" (
     "title" "text" NOT NULL,
     "description" "text",
     "video_url" "text",
+    "thumbnail_url" "text",
     "coordinates" "tiger"."geography",
     "grade" character varying(10),
     "user_id" "uuid",

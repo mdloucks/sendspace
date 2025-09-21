@@ -29,6 +29,7 @@ class PostsRow extends SupabaseDataRow {
     DateTime? createdAt,
     String? description,
     String? videoUrl,
+    String? thumbnailUrl,
     String? coordinates,
     String? grade,
     String? userId,
@@ -39,6 +40,7 @@ class PostsRow extends SupabaseDataRow {
          if (createdAt != null) 'created_at': supaSerialize(createdAt),
          if (description != null) 'description': supaSerialize(description),
          if (videoUrl != null) 'video_url': supaSerialize(videoUrl),
+         if (thumbnailUrl != null) 'thumbnail_url': supaSerialize(thumbnailUrl),
          if (coordinates != null) 'coordinates': supaSerialize(coordinates),
          if (grade != null) 'grade': supaSerialize(grade),
          if (userId != null) 'user_id': supaSerialize(userId),
@@ -95,6 +97,13 @@ class PostsRow extends SupabaseDataRow {
   String? get videoUrl => getField<String>(videoUrlField);
   set videoUrl(String? value) => setField<String>(videoUrlField, value);
 
+  /// Thumbnail Url field name
+  static const String thumbnailUrlField = 'thumbnail_url';
+
+  /// Thumbnail Url
+  String? get thumbnailUrl => getField<String>(thumbnailUrlField);
+  set thumbnailUrl(String? value) => setField<String>(thumbnailUrlField, value);
+
   /// Coordinates field name
   static const String coordinatesField = 'coordinates';
 
@@ -131,6 +140,7 @@ class PostsRow extends SupabaseDataRow {
     DateTime? createdAt,
     String? description,
     String? videoUrl,
+    String? thumbnailUrl,
     String? coordinates,
     String? grade,
     String? userId,
@@ -141,6 +151,7 @@ class PostsRow extends SupabaseDataRow {
     'created_at': supaSerialize(createdAt) ?? data['created_at'],
     'description': supaSerialize(description) ?? data['description'],
     'video_url': supaSerialize(videoUrl) ?? data['video_url'],
+    'thumbnail_url': supaSerialize(thumbnailUrl) ?? data['thumbnail_url'],
     'coordinates': supaSerialize(coordinates) ?? data['coordinates'],
     'grade': supaSerialize(grade) ?? data['grade'],
     'user_id': supaSerialize(userId) ?? data['user_id'],
@@ -148,4 +159,4 @@ class PostsRow extends SupabaseDataRow {
   });
 }
 
-/// Date: 2025-09-14 19:21:40.169710
+/// Date: 2025-09-21 00:14:45.152254

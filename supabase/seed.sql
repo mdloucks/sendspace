@@ -124,7 +124,7 @@ VALUES
     'User One',
     'username1',
     'Just getting started with climbing.',
-    'https://example.com/avatars/user1.png',
+    'https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600',
     'V3'
   ),
   (
@@ -132,7 +132,7 @@ VALUES
     'User Two',
     'username2',
     'Experienced gym rat and outdoor climber.',
-    'https://example.com/avatars/user2.png',
+    'https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600',
     'V7'
   );
 

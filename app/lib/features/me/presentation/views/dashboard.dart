@@ -137,7 +137,6 @@ class _PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(post?.videoUrl);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => PostDetailPage(post: post)),
@@ -157,7 +156,8 @@ class _PostCard extends StatelessWidget {
               height: 180,
               width: double.infinity,
               child: Image.network(
-                "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
+                post.thumbnailUrl ??
+                    "https://image-cdn.essentiallysports.com/wp-content/uploads/explore-through-the-lens-alex-honnold_4x3.jpg?width=600",
                 fit: BoxFit.cover,
               ),
             ),

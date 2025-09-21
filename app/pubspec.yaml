@@ -49,6 +49,8 @@ dependencies:
   uuid: ^4.5.1
   google_fonts: ^6.3.1
   video_player: ^2.10.0
+  path: ^1.9.1
+  video_compress: ^3.1.4
 
 dev_dependencies:
   flutter_test:
@@ -107,3 +109,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+supabase_codegen:
+  env: .env
+  output:  lib/core/data/models/dto  

@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/failures/failure.dart';
 import 'package:sendspace/core/mixins/s3_bucket_mixin.dart';
+import 'package:sendspace/core/mixins/video.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class PostService {
@@ -12,7 +13,7 @@ abstract class PostService {
   Future<List<PostsRow>> getUserPosts();
 }
 
-class SupabasePostService extends PostService with S3BucketMixin {
+class SupabasePostService extends PostService with S3BucketMixin, VideoMixin {
   final SupabaseClient _client;
 
   SupabasePostService(this._client);
@@ -29,19 +30,38 @@ class SupabasePostService extends PostService with S3BucketMixin {
         throw AuthException("User not authenticated");
       }
 
+      // TODO: should only support mp4 and webm
+
       String? videoUrl;
+      String? thumbnailUrl;
       if (videoFile != null) {
-        videoUrl = await uploadObject(
+        // Generate thumbnail
+        // TODO matt debug here, it's not actually generating thumbnail
+        final thumbnailImageData = await generateThumbnailFromVideo(videoFile);
+        videoUrl = await uploadObjectFromFile(
           client: _client,
           bucketName: bucketName,
           file: videoFile,
-          objectKey: generateObjectKeyFromSupabaseClient(_client),
+          objectKey: generateObjectKey(_client, 'video', "mp4"),
         );
+        if (thumbnailImageData != null) {
+          thumbnailUrl = await uploadObjectFromBinary(
+            client: _client,
+            bucketName: bucketName,
+            data: thumbnailImageData,
+            objectKey: generateObjectKey(
+              _client,
+              'thumbnail',
+              thumbnailImageFormat,
+            ),
+          );
+        }
       }
 
       final json =
           post.toJson()
             ..['video_url'] = videoUrl
+            ..['thumbnail_url'] = thumbnailUrl
             ..['created_at'] = DateTime.now().toIso8601String()
             ..['user_id'] = user.id;
 

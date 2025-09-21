@@ -18,7 +18,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   void initState() {
     super.initState();
-    final url = widget.post.data['video_url'];
+    final url = widget.post.videoUrl;
     if (url != null) {
       _controller = VideoPlayerController.networkUrl(Uri.parse(url))
         ..initialize().then((_) {
