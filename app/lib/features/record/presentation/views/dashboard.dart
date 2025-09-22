@@ -6,10 +6,14 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
 import 'package:sendspace/core/presentation/widgets/styled_elevated_button.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
 import 'package:sendspace/theme/spacing.dart';
 
+// TODO: clean this up, prolly after moving to bloc
+//
+// also, add an option to say if they sent it or not
 class RecordPage extends ConsumerWidget {
   const RecordPage({super.key});
 
@@ -35,7 +39,7 @@ class RecordPage extends ConsumerWidget {
     final state = ref.watch(recordStateNotifierProvider);
 
     if (state.status == FormStatus.loading) {
-      return const Center(child: CircularProgressIndicator.adaptive());
+      return const LoadingIndicator();
     }
 
     if (state.error != null) {
@@ -81,23 +85,30 @@ class RecordPage extends ConsumerWidget {
                 ),
             ),
             const Gap(Spacing.md),
-            DropdownButtonFormField<ClimbTypesRow>(
-              value: state.selectedClimbType,
-              items:
+            DropdownMenu<ClimbTypesRow>(
+              initialSelection: state.selectedClimbType,
+              label:
+                  state.selectedClimbType == null
+                      ? Text('Select climb type')
+                      : null,
+              dropdownMenuEntries:
                   state.climbTypes.map((type) {
-                    return DropdownMenuItem(
+                    return DropdownMenuEntry<ClimbTypesRow>(
                       value: type,
-                      child: Text(type.name),
+                      labelWidget: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          type.name,
+                          style: context.textTheme.bodyMedium,
+                        ),
+                      ),
+                      label: type.name,
                     );
                   }).toList(),
-              onChanged:
+              onSelected:
                   (value) => ref
                       .read(recordStateNotifierProvider.notifier)
                       .setSelectedClimbType(value),
-              decoration: const InputDecoration(
-                labelText: 'Climb type',
-                border: OutlineInputBorder(),
-              ),
             ),
             const Gap(Spacing.md),
             TextField(

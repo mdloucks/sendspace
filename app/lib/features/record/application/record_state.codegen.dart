@@ -30,14 +30,9 @@ abstract class RecordState with _$RecordState {
 
 @riverpod
 class RecordStateNotifier extends _$RecordStateNotifier {
-  late final ClimbRepository _climbRepository;
-  late final PostRepository _postRepository;
-
   @override
   RecordState build() {
     Future(() async {
-      _climbRepository = ref.watch(repositoryBundleProvider).climb;
-      _postRepository = ref.watch(repositoryBundleProvider).posts;
       await _loadClimbTypes();
     });
 
@@ -45,7 +40,8 @@ class RecordStateNotifier extends _$RecordStateNotifier {
   }
 
   Future<void> _loadClimbTypes() async {
-    final types = await _climbRepository.getClimbTypes();
+    final climbRepository = ref.watch(repositoryBundleProvider).climb;
+    final types = await climbRepository.getClimbTypes();
     switch (types) {
       case ResultData<List<ClimbTypesRow>>():
         state = state.copyWith(
@@ -81,6 +77,7 @@ class RecordStateNotifier extends _$RecordStateNotifier {
     state = state.copyWith(status: FormStatus.loading);
 
     final climbTypeId = state.selectedClimbType?.id;
+    final postRepository = ref.watch(repositoryBundleProvider).posts;
 
     if (climbTypeId == null) {
       state = state.copyWith(
@@ -97,14 +94,14 @@ class RecordStateNotifier extends _$RecordStateNotifier {
       description: state.description,
     );
 
-    final result = await _postRepository.createPostWithVideo(
+    final result = await postRepository.createPostWithVideo(
       post: post,
       videoFile: state.selectedVideo,
     );
 
     switch (result) {
       case ResultData<void>():
-        state = RecordState();
+        state = RecordState().copyWith(status: FormStatus.ready);
       case ResultFailure<void>():
         state = state.copyWith(
           status: FormStatus.error,

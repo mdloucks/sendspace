@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/theme/app_radius.dart';
 import 'package:sendspace/theme/color_schemes.dart';
+import 'package:sendspace/theme/spacing.dart';
 import 'package:sendspace/theme/text_theme.dart';
 
 class AppTheme {
@@ -10,6 +12,7 @@ class AppTheme {
   static ColorScheme get light => lightColorScheme;
   // Base theme shared between light and dark
   static ThemeData baseTheme(ColorScheme scheme) {
+    final textTheme = buildAppTextTheme(scheme);
     return ThemeData(
       useMaterial3: true,
       highlightColor: Colors.transparent,
@@ -40,9 +43,19 @@ class AppTheme {
         ),
       ),
 
-      inputDecorationTheme: buildInputDecorationTheme(
-        scheme,
-        buildAppTextTheme(scheme),
+      inputDecorationTheme: buildInputDecorationTheme(scheme, textTheme),
+
+      dropdownMenuTheme: DropdownMenuThemeData(
+        inputDecorationTheme: buildInputDecorationTheme(scheme, textTheme),
+        menuStyle: MenuStyle(
+          backgroundColor: WidgetStateProperty.all(scheme.surfaceContainer),
+          padding: WidgetStateProperty.all(const EdgeInsets.all(Spacing.sm)),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -62,30 +75,30 @@ InputDecorationTheme buildInputDecorationTheme(
             : scheme.surface, // subtle background for dark mode
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     labelStyle: textTheme.bodyMedium?.copyWith(
-      color: isDark ? scheme.onSurfaceVariant : scheme.onSurfaceVariant,
-      fontSize: 14,
+      color: scheme.onSurfaceVariant,
+      fontSize: textTheme.bodyMedium?.fontSize,
     ),
     hintStyle: textTheme.bodyMedium?.copyWith(
       color:
           isDark
-              ? scheme.onSurfaceVariant.withOpacity(0.7)
-              : scheme.onSurfaceVariant.withOpacity(0.7),
-      fontSize: 14,
+              ? scheme.onSurfaceVariant.withValues(alpha: 0.7)
+              : scheme.onSurfaceVariant.withValues(alpha: 0.7),
+      fontSize: textTheme.bodyMedium?.fontSize,
     ),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       borderSide: BorderSide(
         color: isDark ? scheme.surfaceContainerHighest : scheme.outline,
       ),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       borderSide: BorderSide(
         color: isDark ? scheme.surfaceContainerHighest : scheme.outline,
       ),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       borderSide: BorderSide(color: scheme.secondary, width: 2),
     ),
   );
