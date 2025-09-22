@@ -12,7 +12,7 @@ import 'package:sendspace/core/data/types/result.dart';
 part 'record_state.codegen.freezed.dart';
 part 'record_state.codegen.g.dart';
 
-enum FormStatus { loading, ready, submitting, error }
+enum FormStatus { loading, ready, submitting, finished, error }
 
 @freezed
 abstract class RecordState with _$RecordState {
@@ -37,6 +37,12 @@ class RecordStateNotifier extends _$RecordStateNotifier {
     });
 
     return RecordState();
+  }
+
+  // After submitting, we want to refresh state, but don't
+  // want to trigger a reload with the climb types load
+  void rebuildWithoutLoad() {
+    state = RecordState(climbTypes: state.climbTypes, status: FormStatus.ready);
   }
 
   Future<void> _loadClimbTypes() async {
@@ -101,7 +107,9 @@ class RecordStateNotifier extends _$RecordStateNotifier {
 
     switch (result) {
       case ResultData<void>():
-        state = RecordState().copyWith(status: FormStatus.ready);
+        state = state.copyWith(status: FormStatus.finished);
+        await Future.delayed(Duration(seconds: 2));
+        rebuildWithoutLoad();
       case ResultFailure<void>():
         state = state.copyWith(
           status: FormStatus.error,

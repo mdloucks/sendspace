@@ -6,7 +6,7 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
-import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
+import 'package:sendspace/core/presentation/widgets/status_indicator.dart';
 import 'package:sendspace/core/presentation/widgets/styled_elevated_button.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
 import 'package:sendspace/theme/spacing.dart';
@@ -39,7 +39,11 @@ class RecordPage extends ConsumerWidget {
     final state = ref.watch(recordStateNotifierProvider);
 
     if (state.status == FormStatus.loading) {
-      return const LoadingIndicator();
+      return StatusIndicator.loading();
+    }
+
+    if (state.status == FormStatus.finished) {
+      return StatusIndicator.success(message: "Post uploaded.");
     }
 
     if (state.error != null) {

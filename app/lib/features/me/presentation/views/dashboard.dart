@@ -3,7 +3,7 @@ import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/data/models/dto/tables/posts.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
-import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
+import 'package:sendspace/core/presentation/widgets/status_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_app_bar.dart';
 import 'package:sendspace/features/me/presentation/widgets/post_detail_page.dart';
@@ -56,11 +56,13 @@ class _MePageState extends ConsumerState<MePage> {
         );
       },
       error: (err, st) {
-        return MeErrorIndicator(
-          onRetry: () {
-            // ignore: unused_result
-            ref.refresh(meStateNotifierProvider);
-          },
+        return StatusIndicator.error(
+          message: 'Failed to load profile.',
+          action: ElevatedButton.icon(
+            onPressed: () => ref.refresh(meStateNotifierProvider),
+            icon: const Icon(Icons.refresh),
+            label: const Text("Retry"),
+          ),
         );
       },
       loading:

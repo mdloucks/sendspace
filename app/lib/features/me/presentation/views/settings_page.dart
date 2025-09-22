@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sendspace/core/application/auth_state.codegen.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
-import 'package:sendspace/core/presentation/widgets/loading_indicator.dart';
-import 'package:sendspace/core/presentation/widgets/me_error_indicator.dart';
+import 'package:sendspace/core/presentation/widgets/status_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_profile_header.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
@@ -180,7 +179,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
         );
       },
-      error: (err, st) => const MeErrorIndicator(),
+      error: (err, st) => StatusIndicator.error(),
       loading: () => const LoadingIndicator(),
     );
   }
