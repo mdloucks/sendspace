@@ -27,6 +27,7 @@ class ProfileAvatar extends StatelessWidget {
     } else {
       return CircleAvatar(
         radius: size / 2,
+        //TODO: come up with actual fallback
         backgroundImage: const AssetImage("assets/images/default_avatar.png"),
       );
     }
