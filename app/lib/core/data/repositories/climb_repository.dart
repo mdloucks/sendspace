@@ -1,4 +1,4 @@
-import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/dto/tables/climb_types.dart';
 import 'package:sendspace/core/data/services/climb_service.dart';
 import 'package:sendspace/core/data/types/result.dart';
 

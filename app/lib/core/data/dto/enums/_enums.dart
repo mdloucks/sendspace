@@ -4,13 +4,6 @@
 //
 // ignore_for_file: require_trailing_commas, constant_identifier_names
 
-/// Location Type enum
-enum LocationType {
-  /// indoor
-  indoor,
+export 'location_type.dart';
 
-  /// outdoor
-  outdoor,
-}
-
-/// Date: 2025-09-21 00:14:45.136260
+/// Date: 2025-09-22 22:13:30.416957

@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
-import 'package:sendspace/core/data/models/dto/tables/users.dart';
+import 'package:sendspace/core/data/dto/tables/profiles.dart';
 import 'package:sendspace/core/mixins/s3_bucket_mixin.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class UserService {
-  Future<UsersRow> getCurrentUserProfile();
-  Future<void> upsertUserProfile(UsersRow user, File? file);
+  Future<ProfilesRow> getCurrentUserProfile();
+  Future<void> upsertUserProfile(ProfilesRow user, File? file);
 }
 
 class SupabaseUserService extends UserService with S3BucketMixin {
@@ -22,18 +22,18 @@ class SupabaseUserService extends UserService with S3BucketMixin {
   String get tableName => 'users';
 
   @override
-  Future<UsersRow> getCurrentUserProfile() async {
+  Future<ProfilesRow> getCurrentUserProfile() async {
     final user = _client.auth.currentUser;
     if (user == null) throw Exception('No logged in user');
 
     final result =
         await _client.from(tableName).select().eq('id', user.id).single();
 
-    return UsersRow.fromJson(result);
+    return ProfilesRow.fromJson(result);
   }
 
   @override
-  Future<void> upsertUserProfile(UsersRow user, File? file) async {
+  Future<void> upsertUserProfile(ProfilesRow user, File? file) async {
     try {
       if (file != null) {
         final objectKey = generateObjectKey(

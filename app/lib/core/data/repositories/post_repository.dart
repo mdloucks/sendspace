@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:sendspace/core/data/models/dto/tables/posts.dart';
+import 'package:sendspace/core/data/dto/tables/posts.dart';
 import 'package:sendspace/core/data/services/post_service.dart';
 import 'package:sendspace/core/data/types/result.dart';
 

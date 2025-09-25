@@ -1,4 +1,4 @@
-import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/dto/tables/climb_types.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class ClimbService {

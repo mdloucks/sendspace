@@ -9,21 +9,22 @@ import 'package:supabase_codegen/supabase_codegen.dart';
 // ignore: unused_import, always_use_package_imports
 import '../database.dart';
 
-/// Users Table
-class UsersTable extends SupabaseTable<UsersRow> {
+/// Profiles Table
+class ProfilesTable extends SupabaseTable<ProfilesRow> {
   /// Table Name
   @override
-  String get tableName => 'users';
+  String get tableName => 'profiles';
 
-  /// Create a [UsersRow] from the [data] provided
+  /// Create a [ProfilesRow] from the [data] provided
   @override
-  UsersRow createRow(Map<String, dynamic> data) => UsersRow.fromJson(data);
+  ProfilesRow createRow(Map<String, dynamic> data) =>
+      ProfilesRow.fromJson(data);
 }
 
-/// Users Row
-class UsersRow extends SupabaseDataRow {
-  /// Users Row
-  UsersRow({
+/// Profiles Row
+class ProfilesRow extends SupabaseDataRow {
+  /// Profiles Row
+  ProfilesRow({
     required String id,
     required String displayName,
     required String userName,
@@ -45,19 +46,19 @@ class UsersRow extends SupabaseDataRow {
          if (updatedAt != null) 'updated_at': supaSerialize(updatedAt),
        });
 
-  /// Users Row
-  const UsersRow._(super.data);
+  /// Profiles Row
+  const ProfilesRow._(super.data);
 
-  /// Create Users Row from a [data] map
-  factory UsersRow.fromJson(Map<String, dynamic> data) =>
-      UsersRow._(data.cleaned);
+  /// Create Profiles Row from a [data] map
+  factory ProfilesRow.fromJson(Map<String, dynamic> data) =>
+      ProfilesRow._(data.cleaned);
 
   /// Get the Json representation of the row
   Map<String, dynamic> toJson() => data;
 
   /// Get the [SupabaseTable] for this row
   @override
-  SupabaseTable get table => UsersTable();
+  SupabaseTable get table => ProfilesTable();
 
   /// Id field name
   static const String idField = 'id';
@@ -119,9 +120,9 @@ class UsersRow extends SupabaseDataRow {
       getField<DateTime>(updatedAtField, defaultValue: DateTime.now())!;
   set updatedAt(DateTime value) => setField<DateTime>(updatedAtField, value);
 
-  /// Make a copy of the current [UsersRow]
+  /// Make a copy of the current [ProfilesRow]
   /// overriding the provided fields
-  UsersRow copyWith({
+  ProfilesRow copyWith({
     String? id,
     String? displayName,
     String? userName,
@@ -130,7 +131,7 @@ class UsersRow extends SupabaseDataRow {
     String? climbingLevel,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => UsersRow.fromJson({
+  }) => ProfilesRow.fromJson({
     'id': supaSerialize(id) ?? data['id'],
     'display_name': supaSerialize(displayName) ?? data['display_name'],
     'user_name': supaSerialize(userName) ?? data['user_name'],
@@ -143,4 +144,4 @@ class UsersRow extends SupabaseDataRow {
   });
 }
 
-/// Date: 2025-09-21 00:14:45.155245
+/// Date: 2025-09-22 22:13:30.433040

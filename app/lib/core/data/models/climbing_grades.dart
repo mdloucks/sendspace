@@ -1,4 +1,3 @@
-// Base sealed class
 sealed class ClimbingGrade {
   final String name;
 
@@ -42,9 +41,28 @@ sealed class ClimbingGrade {
       );
     }
   }
+
+  static ClimbingGrade parseGrade(String grade) {
+    final normalized = grade.trim().toLowerCase();
+
+    if (VGrade._grades.map((g) => g.toLowerCase()).contains(normalized)) {
+      return VGrade.fromString(grade);
+    }
+
+    if (YosemiteGrade._grades
+        .map((g) => g.toLowerCase())
+        .contains(normalized)) {
+      return YosemiteGrade.fromString(grade);
+    }
+
+    if (FrenchGrade._grades.contains(normalized)) {
+      return FrenchGrade.fromString(grade);
+    }
+
+    throw ArgumentError("Unknown grade format: $grade");
+  }
 }
 
-// ------------------- V-Grade (Bouldering) -------------------
 class VGrade extends ClimbingGrade {
   static const List<String> _grades = [
     "VB",
@@ -68,19 +86,22 @@ class VGrade extends ClimbingGrade {
     "V17",
   ];
 
-  const VGrade({required super.name}) : super();
+  const VGrade({required super.name});
 
   @override
   int get rank {
     final idx = _grades.indexOf(name.toUpperCase());
-    if (idx == -1) {
-      throw ArgumentError("Unknown VGrade: $name");
-    }
+    if (idx == -1) throw ArgumentError("Unknown VGrade: $name");
     return idx;
+  }
+
+  static VGrade fromString(String grade) {
+    final idx = _grades.indexOf(grade.toUpperCase());
+    if (idx == -1) throw ArgumentError("Unknown VGrade: $grade");
+    return VGrade(name: _grades[idx]);
   }
 }
 
-// ------------------- Yosemite Decimal (Sport/Trad) -------------------
 class YosemiteGrade extends ClimbingGrade {
   static const List<String> _grades = [
     "5.0",
@@ -119,19 +140,22 @@ class YosemiteGrade extends ClimbingGrade {
     "5.15d",
   ];
 
-  const YosemiteGrade({required super.name}) : super();
+  const YosemiteGrade({required super.name});
 
   @override
   int get rank {
     final idx = _grades.indexOf(name.toLowerCase());
-    if (idx == -1) {
-      throw ArgumentError("Unknown YosemiteGrade: $name");
-    }
+    if (idx == -1) throw ArgumentError("Unknown YosemiteGrade: $name");
     return idx;
+  }
+
+  static YosemiteGrade fromString(String grade) {
+    final idx = _grades.indexOf(grade.toLowerCase());
+    if (idx == -1) throw ArgumentError("Unknown YosemiteGrade: $grade");
+    return YosemiteGrade(name: _grades[idx]);
   }
 }
 
-// ------------------- French Grades -------------------
 class FrenchGrade extends ClimbingGrade {
   static const List<String> _grades = [
     "3",
@@ -166,14 +190,18 @@ class FrenchGrade extends ClimbingGrade {
     "9c",
   ];
 
-  const FrenchGrade({required super.name}) : super();
+  const FrenchGrade({required super.name});
 
   @override
   int get rank {
     final idx = _grades.indexOf(name.toLowerCase());
-    if (idx == -1) {
-      throw ArgumentError("Unknown FrenchGrade: $name");
-    }
+    if (idx == -1) throw ArgumentError("Unknown FrenchGrade: $name");
     return idx;
+  }
+
+  static FrenchGrade fromString(String grade) {
+    final idx = _grades.indexOf(grade.toLowerCase());
+    if (idx == -1) throw ArgumentError("Unknown FrenchGrade: $grade");
+    return FrenchGrade(name: _grades[idx]);
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
-import 'package:sendspace/core/data/models/dto/tables/posts.dart';
+import 'package:sendspace/core/data/dto/tables/posts.dart';
 import 'package:sendspace/core/failures/failure.dart';
 import 'package:sendspace/core/mixins/s3_bucket_mixin.dart';
 import 'package:sendspace/core/mixins/video.dart';

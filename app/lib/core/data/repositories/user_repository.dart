@@ -1,12 +1,15 @@
 import 'dart:io';
 
-import 'package:sendspace/core/data/models/dto/tables/users.dart';
+import 'package:sendspace/core/data/dto/tables/profiles.dart';
 import 'package:sendspace/core/data/services/user_service.dart';
 import 'package:sendspace/core/data/types/result.dart';
 
 abstract class UserRepository {
-  Future<Result<UsersRow>> getCurrentUserProfile();
-  Future<Result<void>> upsertUserProfile({required UsersRow user, File? file});
+  Future<Result<ProfilesRow>> getCurrentUserProfile();
+  Future<Result<void>> upsertUserProfile({
+    required ProfilesRow profile,
+    File? file,
+  });
 }
 
 class UserRepositoryImpl extends UserRepository {
@@ -15,7 +18,7 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._service);
 
   @override
-  Future<Result<UsersRow>> getCurrentUserProfile() async {
+  Future<Result<ProfilesRow>> getCurrentUserProfile() async {
     try {
       final user = await _service.getCurrentUserProfile();
       return ResultData(user);
@@ -26,11 +29,11 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<Result<void>> upsertUserProfile({
-    required UsersRow user,
+    required ProfilesRow profile,
     File? file,
   }) async {
     try {
-      await _service.upsertUserProfile(user, file);
+      await _service.upsertUserProfile(profile, file);
       return ResultData(null);
     } catch (e) {
       return ResultFailure(e.toString());
