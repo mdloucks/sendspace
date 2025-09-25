@@ -112,4 +112,4 @@ flutter:
 
 supabase_codegen:
   env: .env
-  output:  lib/core/data/models/dto  
+  output:  lib/core/data/dto  

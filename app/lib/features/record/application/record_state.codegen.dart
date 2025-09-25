@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
-import 'package:sendspace/core/data/models/dto/tables/posts.dart';
-import 'package:sendspace/core/data/repositories/climb_repository.dart';
-import 'package:sendspace/core/data/repositories/post_repository.dart';
+import 'package:sendspace/core/data/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/dto/tables/posts.dart';
 import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:sendspace/core/data/types/result.dart';
+import 'package:sendspace/core/failures/failure.dart';
 
 part 'record_state.codegen.freezed.dart';
 part 'record_state.codegen.g.dart';
@@ -57,6 +56,10 @@ class RecordStateNotifier extends _$RecordStateNotifier {
       case ResultFailure<List<ClimbTypesRow>>():
         state = state.copyWith(error: types.message);
     }
+  }
+
+  void setErrror(Failure failure) {
+    state = state.copyWith(error: failure.message);
   }
 
   void setSelectedClimbType(ClimbTypesRow? type) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sendspace/core/data/models/dto/tables/posts.dart';
+import 'package:sendspace/core/data/dto/tables/posts.dart';
 import 'package:video_player/video_player.dart';
 
 class PostDetailPage extends StatefulWidget {

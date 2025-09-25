@@ -1,15 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:sendspace/core/data/models/dto/tables/users.dart';
+import 'package:sendspace/core/data/dto/tables/profiles.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/me/presentation/views/settings_page.dart';
 import 'package:sendspace/features/me/presentation/widgets/me_profile_header.dart';
 
 class MeAppBar extends StatelessWidget {
-  final UsersRow user;
+  final ProfilesRow profile;
 
-  const MeAppBar({super.key, required this.user});
+  const MeAppBar({super.key, required this.profile});
 
   static const double _maxSliverHeight = 200;
   static const double _minSliverHeight = 88;
@@ -42,7 +42,7 @@ class MeAppBar extends StatelessWidget {
                 maxTextSize: context.textTheme.headlineLarge?.fontSize ?? 32,
                 minImageSize: 64,
                 maxImageSize: 144,
-                user: user,
+                profile: profile,
                 percentage: percentage,
                 trailing: GestureDetector(
                   child: const Icon(Icons.settings_outlined),

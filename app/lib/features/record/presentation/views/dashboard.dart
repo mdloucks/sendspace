@@ -4,10 +4,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendspace/core/data/models/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/dto/tables/climb_types.dart';
+import 'package:sendspace/core/data/dto/tables/profiles.dart';
+import 'package:sendspace/core/data/models/climbing_grades.dart';
+import 'package:sendspace/core/data/repositories/repository_bundle_provider.codegen.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
+import 'package:sendspace/core/failures/failure.dart';
 import 'package:sendspace/core/presentation/widgets/status_indicator.dart';
 import 'package:sendspace/core/presentation/widgets/styled_elevated_button.dart';
+import 'package:sendspace/features/me/application/me_state.codegen.dart';
 import 'package:sendspace/features/record/application/record_state.codegen.dart';
 import 'package:sendspace/theme/spacing.dart';
 
@@ -30,12 +35,22 @@ class RecordPage extends ConsumerWidget {
     }
   }
 
-  Future<void> _submit(BuildContext context, WidgetRef ref) async {
+  Future<void> _submit(WidgetRef ref, ProfilesRow? profileData) async {
+    if (profileData == null) {
+      ref
+          .read(recordStateNotifierProvider.notifier)
+          .setErrror(StateFailure("Failed to update climbing level"));
+    }
     ref.read(recordStateNotifierProvider.notifier).uploadPost();
+    final newGrade = ref.read(recordStateNotifierProvider).grade;
+    await ref
+        .read(meStateNotifierProvider.notifier)
+        .updateClimbingLevel(newGrade);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(meStateNotifierProvider).profile;
     final state = ref.watch(recordStateNotifierProvider);
 
     if (state.status == FormStatus.loading) {
@@ -141,7 +156,7 @@ class RecordPage extends ConsumerWidget {
             const Gap(Spacing.md),
             StyledElevatedButton.primary(
               context: context,
-              onPressed: () => _submit(context, ref),
+              onPressed: () => _submit(ref, profile.value),
               icon: Icon(Icons.send_outlined),
               child: Text('Submit'),
             ),

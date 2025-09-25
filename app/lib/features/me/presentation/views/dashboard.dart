@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sendspace/core/data/models/dto/tables/posts.dart';
+import 'package:sendspace/core/data/dto/tables/posts.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/core/presentation/widgets/status_indicator.dart';
 import 'package:sendspace/features/me/application/me_state.codegen.dart';
@@ -9,33 +9,20 @@ import 'package:sendspace/features/me/presentation/widgets/me_app_bar.dart';
 import 'package:sendspace/features/me/presentation/widgets/post_detail_page.dart';
 import 'package:sendspace/theme/spacing.dart';
 
-class MePage extends ConsumerStatefulWidget {
+class MePage extends ConsumerWidget {
   const MePage({super.key});
 
   @override
-  ConsumerState<MePage> createState() => _MePageState();
-}
-
-class _MePageState extends ConsumerState<MePage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      ref.read(meStateNotifierProvider.notifier).init();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(meStateNotifierProvider, (prev, next) {
-      if (next.user is AsyncError) {
+      if (next.profile is AsyncError) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Profile failed to update.")),
         );
       }
     });
 
-    final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
+    final user = ref.watch(meStateNotifierProvider.select((s) => s.profile));
 
     return user.when(
       data: (userData) {
@@ -43,7 +30,7 @@ class _MePageState extends ConsumerState<MePage> {
           backgroundColor: context.colorScheme.surface,
           body: CustomScrollView(
             slivers: [
-              MeAppBar(user: userData),
+              MeAppBar(profile: userData),
 
               // TODO: make tiles fade out as you scroll. It's tricky because of the slivers
               // would love to just use a ShaderMask

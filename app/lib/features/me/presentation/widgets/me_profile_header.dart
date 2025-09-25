@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:sendspace/core/data/models/dto/tables/users.dart';
+import 'package:sendspace/core/data/dto/tables/profiles.dart';
 import 'package:sendspace/core/extensions/build_context.dart';
 import 'package:sendspace/features/me/presentation/widgets/profile_avatar.dart';
 import 'package:sendspace/theme/spacing.dart';
@@ -17,7 +17,7 @@ class MeProfileHeader extends StatelessWidget {
     required this.maxImageSize,
     required this.minTextSize,
     required this.maxTextSize,
-    required this.user,
+    required this.profile,
     required this.percentage,
     this.localAssetPath,
     this.trailing,
@@ -26,7 +26,7 @@ class MeProfileHeader extends StatelessWidget {
   /// Full profile header, no wrapping.
   factory MeProfileHeader.large({
     Key? key,
-    required UsersRow user,
+    required ProfilesRow profile,
     Widget? trailing,
     String? localAssetPath,
   }) {
@@ -36,7 +36,7 @@ class MeProfileHeader extends StatelessWidget {
       maxImageSize: 86.0,
       minTextSize: 18.0,
       maxTextSize: 28.0,
-      user: user,
+      profile: profile,
       percentage: 1,
       trailing: trailing,
       localAssetPath: localAssetPath,
@@ -46,7 +46,7 @@ class MeProfileHeader extends StatelessWidget {
   /// Condensed profile header, will wrap smaller elements.
   factory MeProfileHeader.small({
     Key? key,
-    required UsersRow user,
+    required ProfilesRow profile,
     String? localAssetPath,
   }) {
     return MeProfileHeader(
@@ -55,7 +55,7 @@ class MeProfileHeader extends StatelessWidget {
       maxImageSize: 60.0,
       minTextSize: 12.0,
       maxTextSize: 20.0,
-      user: user,
+      profile: profile,
       percentage: 0.3,
       localAssetPath: localAssetPath,
     );
@@ -66,7 +66,7 @@ class MeProfileHeader extends StatelessWidget {
   final double minTextSize;
   final double maxTextSize;
 
-  final UsersRow user;
+  final ProfilesRow profile;
   final double percentage;
   final Widget? trailing;
   final String? localAssetPath;
@@ -111,7 +111,7 @@ class MeProfileHeader extends StatelessWidget {
         children: [
           ProfileAvatar(
             size: imageSize,
-            networkUrl: user.profileImageUrl,
+            networkUrl: profile.profileImageUrl,
             localAssetPath: localAssetPath,
           ),
           Gap(Spacing.lg),
@@ -127,7 +127,7 @@ class MeProfileHeader extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    user.displayName,
+                    profile.displayName,
                     style: scaledNameStyle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -135,15 +135,19 @@ class MeProfileHeader extends StatelessWidget {
                   ),
                 ),
                 if (!isExpanded) Gap(Spacing.sm),
-                RichText(
-                  text: TextSpan(
-                    text: 'V',
-                    style: scaledGradeVStyle,
-                    children: [
-                      TextSpan(text: '3', style: scaledGradeNumberStyle),
-                    ],
-                  ),
+                Text(
+                  profile.climbingLevel ?? "No grade yet",
+                  style: scaledGradeVStyle,
                 ),
+                // RichText(
+                //   text: TextSpan(
+                //     text: 'V',
+                //     style: scaledGradeVStyle,
+                //     children: [
+                //       TextSpan(text: '3', style: scaledGradeNumberStyle),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

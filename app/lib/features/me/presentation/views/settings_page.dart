@@ -34,7 +34,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     _displaynameController = TextEditingController();
 
     Future.microtask(() {
-      final user = ref.read(meStateNotifierProvider).user;
+      final user = ref.read(meStateNotifierProvider).profile;
       user.whenData((userData) {
         _usernameController.text = userData.userName;
         _displaynameController.text = userData.displayName;
@@ -65,7 +65,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(meStateNotifierProvider.select((s) => s.user));
+    final user = ref.watch(meStateNotifierProvider.select((s) => s.profile));
 
     return user.when(
       data: (userData) {
@@ -84,7 +84,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ref
                       .read(meStateNotifierProvider.notifier)
                       .upsertUserProfile(
-                        user: newUserData,
+                        profile: newUserData,
                         file: _selectedImage,
                       );
                 }
@@ -97,7 +97,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               const SizedBox(height: 24),
               // Profile section
               MeProfileHeader.large(
-                user: userData,
+                profile: userData,
                 localAssetPath: _selectedImage?.path,
                 trailing: ElevatedButton.icon(
                   onPressed: _pickImage,
@@ -180,7 +180,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         );
       },
       error: (err, st) => StatusIndicator.error(),
-      loading: () => const LoadingIndicator(),
+      loading: () => StatusIndicator.loading(),
     );
   }
 }
